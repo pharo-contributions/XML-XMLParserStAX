@@ -259,6 +259,26 @@ StAXParserTest >> testPeekRepeating [
 ]
 
 { #category : #tests }
+StAXParserTest >> testSkip [
+	| events parser |
+
+	events :=
+		((StAXParser on: self sampleXML) next: 5),
+		((StAXParser on: self sampleXML)
+			skip: 5;
+			upToEnd).
+	self assertIsSampleXMLEvents: events.
+
+	(parser := StAXParser on: self sampleXML)
+		skip: events size - 1.
+	self deny: parser atEnd.
+	parser skip: 1.
+	self assert: parser atEnd.
+	parser skip: events size.
+	self assert: parser atEnd.
+]
+
+{ #category : #tests }
 StAXParserTest >> testSkipsCDataEvents [
 	| xml parser |
 

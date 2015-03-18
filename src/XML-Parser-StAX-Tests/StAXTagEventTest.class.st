@@ -68,9 +68,8 @@ StAXTagEventTest >> testNamespaceURI [
 		assert: self newEvent namespaceURI isEmpty;
 		assert:
 			(self eventClass
-				name: ''
-				localName: ''
-				namespaceURI: 'test') namespaceURI = 'test'
+				name: 'test'
+				namespaceURI: 'testNS') namespaceURI = 'testNS'
 ]
 
 { #category : #tests }
