@@ -1,5 +1,5 @@
 "
-A list of StAX events.
+A list for StAX events that supports conversion to DOM.
 "
 Class {
 	#name : #StAXEventList,

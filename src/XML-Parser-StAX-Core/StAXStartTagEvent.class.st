@@ -51,6 +51,12 @@ StAXStartTagEvent >> hasAttributes [
 ]
 
 { #category : #testing }
+StAXStartTagEvent >> hasNamespaces [
+	^ namespaceScope notNil
+		and: [namespaceScope hasNamespaces].
+]
+
+{ #category : #testing }
 StAXStartTagEvent >> includesAttribute: anAttributeName [
 	^ self attributes includesKey: anAttributeName
 ]
@@ -77,7 +83,10 @@ StAXStartTagEvent >> namespaceScope [
 ]
 
 { #category : #initialization }
-StAXStartTagEvent >> setAttributes: anAttributeDictionary [
+StAXStartTagEvent >> setName: aName localName: aLocalName namespaceURI: aNamespaceUri attributes: anAttributeDictionary [
+	name := aName.
+	localName := aLocalName.
+	namespaceUri := aNamespaceUri.
 	attributes := anAttributeDictionary
 ]
 
@@ -88,9 +97,14 @@ StAXStartTagEvent >> setNamespaceScope: aNamespaceScope [
 
 { #category : #printing }
 StAXStartTagEvent >> writeXMLOn: aWriter [
-	(aWriter tag
-		name: name)
-		setAttributes: attributes;
-		startWriting
+	| tagWriter |
+
+	tagWriter := aWriter tag: name.
+	self hasNamespaces
+		ifTrue: [tagWriter setXmlnsDeclarations: self namespaceScope prefixMappings].
+	self hasAttributes
+		ifTrue: [tagWriter setAttributes: self attributeNodes].
+
+	tagWriter startWriting.
 		
 ]

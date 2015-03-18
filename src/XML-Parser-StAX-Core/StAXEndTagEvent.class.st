@@ -27,6 +27,13 @@ StAXEndTagEvent >> isEndTag: aTagName namespaceURI: aUri [
 	^ (self isNamed: aTagName) and: [self namespaceURI = aUri]
 ]
 
+{ #category : #initialization }
+StAXEndTagEvent >> setName: aName localName: aLocalName namespaceURI: aNamespaceUri [
+	name := aName.
+	localName := aLocalName.
+	namespaceUri := aNamespaceUri.
+]
+
 { #category : #printing }
 StAXEndTagEvent >> writeXMLOn: aWriter [
 	| tagWriter |

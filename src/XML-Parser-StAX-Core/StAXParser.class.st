@@ -2,11 +2,11 @@
 This is a StAX-style pull parser for XMLParser that provides a stream-like interface for ""pulling"" XML events and optionally converting them to DOM. It is a fork of XMLPullParser and is MIT licensed.
 
 Examples:
-	""get first book element as a XMLElement DOM object:""
-	parser := StAXParser on: xml.
-	parser
-		skipUntil: [parser peek isStartTag: 'book'];
-		nextDOM.
+	""get first book element as an XMLElement object:""
+	element := 
+		(parser := StAXParser on: xml)
+			skipUntil: [parser peek isStartTag: 'book'];
+			nextDOM.
 "
 Class {
 	#name : #StAXParser,
@@ -114,8 +114,8 @@ StAXParser >> endDocument [
 { #category : #'handling - content' }
 StAXParser >> endElement: aQualifiedName prefix: aPrefix uri: aUri localName: aLocalName [
 	self addEvent:
-		(StAXEndTagEvent
-			name: aQualifiedName
+		(StAXEndTagEvent new
+			setName: aQualifiedName
 			localName: aLocalName
 			namespaceURI: aUri)
 ]
@@ -205,13 +205,13 @@ StAXParser >> peek [
 	peek
 		ifNotNil: [^ peek].
 	eventQueue isEmpty
+		ifTrue: [
+			[parser atEnd]
+				whileFalse: [
+					parser parseToken.
+					peek ifNotNil: [^ peek]].
+			^ peek := StAXEndDocumentEvent new]
 		ifFalse: [^ peek := eventQueue removeFirst].
-
-	[parser atEnd] whileFalse: [
-		parser parseToken.
-		peek ifNotNil: [^ peek]].
-
-	^ peek := StAXEndDocumentEvent new.
 ]
 
 { #category : #'handling - content' }
@@ -291,11 +291,11 @@ StAXParser >> startDocument [
 { #category : #'handling - content' }
 StAXParser >> startElement: aQualifiedName prefix: aPrefix uri: aUri localName: aLocalName attributes: anAttributeCollection [
 	self addEvent:
-		((StAXStartTagEvent
-			name: aQualifiedName
+		(StAXStartTagEvent new
+			setName: aQualifiedName
 			localName: aLocalName
-			namespaceURI: aUri)
-				setAttributes: anAttributeCollection)
+			namespaceURI: aUri
+			attributes: anAttributeCollection)
 ]
 
 { #category : #accessing }

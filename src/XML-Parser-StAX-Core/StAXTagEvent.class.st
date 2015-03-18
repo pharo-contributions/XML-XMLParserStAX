@@ -13,11 +13,15 @@ Class {
 }
 
 { #category : #'instance creation' }
-StAXTagEvent class >> name: aName localName: aLocalName namespaceURI: aNamespaceUri [
+StAXTagEvent class >> name: aName namespaceURI: aNamespaceUri [
 	^ self new
 		setName: aName
-		localName: aLocalName
 		namespaceURI: aNamespaceUri
+]
+
+{ #category : #'instance creation' }
+StAXTagEvent class >> named: aName [
+	^ self new name: aName
 ]
 
 { #category : #testing }
@@ -67,8 +71,7 @@ StAXTagEvent >> printBodyOn: aStream [
 ]
 
 { #category : #initialization }
-StAXTagEvent >> setName: aName localName: aLocalName namespaceURI: aNamespaceUri [
+StAXTagEvent >> setName: aName namespaceURI: aNamespaceUri [
 	name := aName.
-	localName := aLocalName.
 	namespaceUri := aNamespaceUri.
 ]
