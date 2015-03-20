@@ -165,6 +165,25 @@ StAXParserTest >> sampleXML [
 ]
 
 { #category : #tests }
+StAXParserTest >> testAsDOM [
+	| node |
+
+	node := (StAXParser on: self sampleXML) upToEnd asDOM.
+	self
+		assert: node isDocument;
+		assert:
+			node allElements elementNames asArray =
+				#('one' 'two' 'three' 'four' 'five' 'six').
+
+	node := (StAXParser on: self sampleXML) upToEnd allButFirst asDOM.
+	self
+		assert: (node isElementNamed: 'one');
+		assert:
+			node allElements elementNames asArray =
+				#('one' 'two' 'three' 'four' 'five' 'six').
+]
+
+{ #category : #tests }
 StAXParserTest >> testCurrent [
 	| parser events |
 
@@ -198,6 +217,10 @@ StAXParserTest >> testNext [
 
 	"subsequent calls return end document events"
 	self assert: parser next isEndDocument.
+
+	parser := StAXParser on: self sampleXML.
+	self assertIsSampleXMLEvents: (parser next: events size).
+	self assert: (parser next: events size) isEmpty.
 ]
 
 { #category : #tests }
@@ -217,6 +240,28 @@ StAXParserTest >> testNextDOM [
 
 	parser upToEnd.
 	self assert: parser nextDOM isNil.
+]
+
+{ #category : #tests }
+StAXParserTest >> testNextUntil [
+	| parser |
+
+	parser := StAXParser on: self sampleXML.
+	self assertIsSampleXMLEvents: (parser nextUntil: [parser atEnd]).
+	self
+		assert: (parser nextUntil: [false]) isEmpty;
+		assert: (parser nextUntil: [true]) isEmpty.
+]
+
+{ #category : #tests }
+StAXParserTest >> testNextWhile [
+	| parser |
+
+	parser := StAXParser on: self sampleXML.
+	self assertIsSampleXMLEvents: (parser nextWhile: [parser atEnd not]).
+	self
+		assert: (parser nextWhile: [false]) isEmpty;
+		assert: (parser nextWhile: [true]) isEmpty.
 ]
 
 { #category : #tests }
