@@ -142,7 +142,10 @@ StAXParser >> next: anInteger [
 	| eventList |
 
 	eventList := self newEventList.
-	1 to: anInteger do: [:each | eventList addLast: self next].
+	1 to: anInteger do: [:each |
+		self atEnd
+			ifTrue: [^ eventList].
+		eventList addLast: self next].
 	^ eventList.
 ]
 
