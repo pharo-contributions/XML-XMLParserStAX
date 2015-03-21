@@ -103,7 +103,7 @@ StAXStartTagEvent >> writeXMLOn: aWriter [
 	self hasNamespaces
 		ifTrue: [tagWriter setXmlnsDeclarations: self namespaceScope prefixMappings].
 	self hasAttributes
-		ifTrue: [tagWriter setAttributes: self attributeNodes].
+		ifTrue: [tagWriter setAttributes: self attributes].
 
 	tagWriter startWriting.
 		
