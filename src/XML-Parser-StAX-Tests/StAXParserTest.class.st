@@ -405,3 +405,14 @@ StAXParserTest >> testSkipsPIEvents [
 StAXParserTest >> testUpToEnd [
 	self assertIsSampleXMLEvents: (StAXParser on: self sampleXML) upToEnd
 ]
+
+{ #category : #tests }
+StAXParserTest >> testWriteEvents [
+	self assert:
+		(XMLWriter writeWith: [:writer |
+			writer writeEvents: (StAXParser on: self sampleXML) upToEnd]) =
+				((XMLDOMParser on: self sampleXML)
+					preservesCommentNodes: true;
+					preservesCDataNodes: true;
+					parseDocument) root printString
+]
