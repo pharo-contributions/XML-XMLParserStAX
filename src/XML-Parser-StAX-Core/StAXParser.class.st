@@ -112,12 +112,12 @@ StAXParser >> endDocument [
 ]
 
 { #category : #'handling - content' }
-StAXParser >> endElement: aQualifiedName prefix: aPrefix uri: aUri localName: aLocalName [
+StAXParser >> endElement: aQualifiedName prefix: aPrefix uri: aURI localName: aLocalName [
 	self addEvent:
 		(StAXEndTagEvent new
 			setName: aQualifiedName
 			localName: aLocalName
-			namespaceURI: aUri)
+			namespaceURI: aURI)
 ]
 
 { #category : #testing }
@@ -178,10 +178,10 @@ StAXParser >> nextWhile: aBlock [
 ]
 
 { #category : #initialization }
-StAXParser >> on: aStringOrStream documentURI: aUri [
+StAXParser >> on: aStringOrStream documentURI: aURI [
 	super
 		on: aStringOrStream
-		documentURI: aUri.
+		documentURI: aURI.
 
 	parser := self parser.
 	current := StAXInitialEvent new.
@@ -218,14 +218,14 @@ StAXParser >> peek [
 ]
 
 { #category : #'handling - content' }
-StAXParser >> processingInstruction: aTarget data: aData [
+StAXParser >> processingInstruction: aTargetString data: aDataString [
 	(self isInInternalSubset
 		or: [self skipsPIEvents])
 		ifFalse: [
 			self addEvent:
 				(StAXPIEvent
-					target: aTarget
-					data: aData)]
+					target: aTargetString
+					data: aDataString)]
 ]
 
 { #category : #enumerating }
@@ -292,12 +292,12 @@ StAXParser >> startDocument [
 ]
 
 { #category : #'handling - content' }
-StAXParser >> startElement: aQualifiedName prefix: aPrefix uri: aUri localName: aLocalName attributes: anAttributeCollection [
+StAXParser >> startElement: aQualifiedName prefix: aPrefix uri: aURI localName: aLocalName attributes: anAttributeCollection [
 	self addEvent:
 		(StAXStartTagEvent new
 			setName: aQualifiedName
 			localName: aLocalName
-			namespaceURI: aUri
+			namespaceURI: aURI
 			attributes: anAttributeCollection)
 ]
 

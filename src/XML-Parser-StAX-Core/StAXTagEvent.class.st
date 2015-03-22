@@ -7,16 +7,16 @@ Class {
 	#instVars : [
 		'name',
 		'localName',
-		'namespaceUri'
+		'namespaceURI'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
 
 { #category : #'instance creation' }
-StAXTagEvent class >> name: aName namespaceURI: aNamespaceUri [
+StAXTagEvent class >> name: aName namespaceURI: aURI [
 	^ self new
 		setName: aName
-		namespaceURI: aNamespaceUri
+		namespaceURI: aURI
 ]
 
 { #category : #'instance creation' }
@@ -54,7 +54,7 @@ StAXTagEvent >> name: aName [
 
 { #category : #accessing }
 StAXTagEvent >> namespaceURI [
-	^ namespaceUri ifNil: [namespaceUri := '']
+	^ namespaceURI ifNil: [namespaceURI := '']
 ]
 
 { #category : #accessing }
@@ -71,7 +71,7 @@ StAXTagEvent >> printBodyOn: aStream [
 ]
 
 { #category : #initialization }
-StAXTagEvent >> setName: aName namespaceURI: aNamespaceUri [
+StAXTagEvent >> setName: aName namespaceURI: aURI [
 	name := aName.
-	namespaceUri := aNamespaceUri.
+	namespaceURI := aURI.
 ]

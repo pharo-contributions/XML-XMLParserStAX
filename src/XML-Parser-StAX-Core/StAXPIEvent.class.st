@@ -12,10 +12,10 @@ Class {
 }
 
 { #category : #'instance creation' }
-StAXPIEvent class >> target: aTarget data: aData [
+StAXPIEvent class >> target: aTargetString data: aDataString [
 	^ self new
-		target: aTarget;
-		data: aData
+		target: aTargetString;
+		data: aDataString
 ]
 
 { #category : #building }
@@ -44,8 +44,8 @@ StAXPIEvent >> target [
 ]
 
 { #category : #accessing }
-StAXPIEvent >> target: aTarget [
-	target := aTarget
+StAXPIEvent >> target: aString [
+	target := aString
 ]
 
 { #category : #printing }

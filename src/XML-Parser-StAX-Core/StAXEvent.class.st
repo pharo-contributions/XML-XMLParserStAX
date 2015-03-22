@@ -37,7 +37,7 @@ StAXEvent >> isEndTag: aTagName [
 ]
 
 { #category : #testing }
-StAXEvent >> isEndTag: aTagName namespaceURI: aUri [
+StAXEvent >> isEndTag: aTagName namespaceURI: aURI [
 	^ false
 ]
 
@@ -67,7 +67,7 @@ StAXEvent >> isStartTag: aTagName [
 ]
 
 { #category : #testing }
-StAXEvent >> isStartTag: aTagName namespaceURI: aUri [
+StAXEvent >> isStartTag: aTagName namespaceURI: aURI [
 	^ false
 ]
 

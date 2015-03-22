@@ -72,9 +72,9 @@ StAXStartTagEvent >> isStartTag: aTagName [
 ]
 
 { #category : #testing }
-StAXStartTagEvent >> isStartTag: aTagName namespaceURI: aUri [
+StAXStartTagEvent >> isStartTag: aTagName namespaceURI: aURI [
 	^ (self isNamed: aTagName)
-		and: [self namespaceURI = aUri]
+		and: [self namespaceURI = aURI]
 ]
 
 { #category : #private }
@@ -83,10 +83,10 @@ StAXStartTagEvent >> namespaceScope [
 ]
 
 { #category : #initialization }
-StAXStartTagEvent >> setName: aName localName: aLocalName namespaceURI: aNamespaceUri attributes: anAttributeDictionary [
+StAXStartTagEvent >> setName: aName localName: aLocalName namespaceURI: aNamespaceURI attributes: anAttributeDictionary [
 	name := aName.
 	localName := aLocalName.
-	namespaceUri := aNamespaceUri.
+	namespaceURI := aNamespaceURI.
 	attributes := anAttributeDictionary
 ]
 

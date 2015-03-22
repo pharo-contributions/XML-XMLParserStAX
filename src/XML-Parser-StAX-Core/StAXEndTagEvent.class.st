@@ -23,15 +23,15 @@ StAXEndTagEvent >> isEndTag: aTagName [
 ]
 
 { #category : #testing }
-StAXEndTagEvent >> isEndTag: aTagName namespaceURI: aUri [
-	^ (self isNamed: aTagName) and: [self namespaceURI = aUri]
+StAXEndTagEvent >> isEndTag: aTagName namespaceURI: aURI [
+	^ (self isNamed: aTagName) and: [self namespaceURI = aURI]
 ]
 
 { #category : #initialization }
-StAXEndTagEvent >> setName: aName localName: aLocalName namespaceURI: aNamespaceUri [
+StAXEndTagEvent >> setName: aName localName: aLocalName namespaceURI: aURI [
 	name := aName.
 	localName := aLocalName.
-	namespaceUri := aNamespaceUri.
+	namespaceURI := aURI.
 ]
 
 { #category : #printing }
