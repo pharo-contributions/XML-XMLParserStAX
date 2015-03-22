@@ -60,7 +60,8 @@ StAXParser >> collect: aBlock [
 	| list |
 
 	list := XMLOrderedList new.
-	self do: [:each | list addLast: (aBlock value: each)]
+	self do: [:each | list addLast: (aBlock value: each)].
+	^ list.
 ]
 
 { #category : #'handling - lexical' }

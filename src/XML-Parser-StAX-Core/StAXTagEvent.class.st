@@ -25,8 +25,8 @@ StAXTagEvent class >> named: aName [
 ]
 
 { #category : #testing }
-StAXTagEvent >> isNamed: aName [
-	^ aName
+StAXTagEvent >> isNamed: aTagName [
+	^ aTagName
 		isQualifiedName: self name
 		orLocalName: self localName
 ]
