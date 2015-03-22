@@ -200,6 +200,15 @@ StAXParserTest >> testCurrent [
 ]
 
 { #category : #tests }
+StAXParserTest >> testDo [
+	| events |
+
+	events := OrderedCollection new.
+	(StAXParser on: self sampleXML) do: [:each | events add: each].
+	self assertIsSampleXMLEvents: events.
+]
+
+{ #category : #tests }
 StAXParserTest >> testNamespaceParsing [
 	self assertIsSampleNamespaceXMLEvents:
 		(StAXParser on: self sampleNamespaceXML) upToEnd.
@@ -301,6 +310,16 @@ StAXParserTest >> testPeekRepeating [
 
 	"subsequent calls return end document events"
 	self assert: parser peek isEndDocument.
+]
+
+{ #category : #tests }
+StAXParserTest >> testSelect [
+	| parser |
+
+	parser := StAXParser on: self sampleXML.
+	self assert:
+		((parser select: [:each | each isStartTag]) collect: [:each | each name]) asArray = 
+			#('one' 'two' 'three' 'four' 'five' 'six').
 ]
 
 { #category : #tests }
