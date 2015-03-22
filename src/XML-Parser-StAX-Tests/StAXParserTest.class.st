@@ -184,6 +184,35 @@ StAXParserTest >> testAsDOM [
 ]
 
 { #category : #tests }
+StAXParserTest >> testAsDOMInheritsConfiguration [
+	| parser configuration nodeConfiguration |
+
+	parser := StAXParser on: self sampleXML.
+	(configuration := parser configuration)
+		usesNamespaces: false;
+		isValidating: false.
+	nodeConfiguration := parser upToEnd asDOM configuration.
+	self
+		deny: nodeConfiguration usesNamespaces;
+		deny: nodeConfiguration isValidating;
+		assert: nodeConfiguration parserHandlerClass = XMLDOMParser;
+		assert: nodeConfiguration parserLimits == configuration parserLimits;
+		assert: nodeConfiguration entityConfiguration == configuration entityConfiguration.
+]
+
+{ #category : #tests }
+StAXParserTest >> testCollect [
+	| parser pairs |
+
+	parser := StAXParser on: self sampleXML.
+	pairs := parser collect: [:each | each -> each identityHash].
+	self
+		assert: pairs class == XMLOrderedList;
+		assert: (pairs allSatisfy: [:each | each isKindOf: Association]);
+		assertIsSampleXMLEvents: (pairs collect: [:each | each key]).
+]
+
+{ #category : #tests }
 StAXParserTest >> testCurrent [
 	| parser events |
 
@@ -197,6 +226,31 @@ StAXParserTest >> testCurrent [
 	self assertIsSampleXMLEvents: events.
 
 	self assert: parser current isEndDocument.
+]
+
+{ #category : #tests }
+StAXParserTest >> testDetect [
+	| parser |
+
+	parser := StAXParser on: self sampleXML.
+	self
+		assert: ((parser detect: [:each | each isStartTag: 'two']) isStartTag: 'two');
+		assert: (parser detect: [:each | each isStartTag: 'two']) isNil.
+]
+
+{ #category : #tests }
+StAXParserTest >> testDetectIfNone [
+	| parser |
+
+	parser := StAXParser on: self sampleXML.
+	self assert:
+		((parser
+			detect: [:each | each isStartTag: 'two']
+			ifNone: [#absent]) isStartTag: 'two').
+	self assert:
+		(parser
+			detect: [:each | each isStartTag: 'two']
+			ifNone: [#absent]) = #absent.
 ]
 
 { #category : #tests }
@@ -249,6 +303,23 @@ StAXParserTest >> testNextDOM [
 
 	parser upToEnd.
 	self assert: parser nextDOM isNil.
+]
+
+{ #category : #tests }
+StAXParserTest >> testNextDOMInheritsConfiguration [
+	| parser configuration nodeConfiguration |
+
+	parser := StAXParser on: self sampleXML.
+	(configuration := parser configuration)
+		usesNamespaces: false;
+		isValidating: false.
+	nodeConfiguration := parser nextDOM configuration.
+	self
+		deny: nodeConfiguration usesNamespaces;
+		deny: nodeConfiguration isValidating;
+		assert: nodeConfiguration parserHandlerClass = XMLDOMParser;
+		assert: nodeConfiguration parserLimits == configuration parserLimits;
+		assert: nodeConfiguration entityConfiguration == configuration entityConfiguration.
 ]
 
 { #category : #tests }
@@ -347,7 +418,6 @@ StAXParserTest >> testSkipsCDataEvents [
 	| xml parser |
 
 	xml := '
-		<?xml version="1.0"?>
 		<test>
 			<![CDATA[cdata text]]>
 		</test>'.
@@ -377,7 +447,6 @@ StAXParserTest >> testSkipsCommentEvents [
 	| xml parser |
 
 	xml := '
-		<?xml version="1.0"?>
 		<test>
 			<!--comment-->
 		</test>'.
@@ -401,7 +470,6 @@ StAXParserTest >> testSkipsPIEvents [
 	| xml parser |
 
 	xml := '
-		<?xml version="1.0"?>
 		<test>
 			<?target data?>
 		</test>'.
