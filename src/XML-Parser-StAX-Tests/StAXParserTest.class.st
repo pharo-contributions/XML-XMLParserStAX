@@ -306,6 +306,23 @@ StAXParserTest >> testNextDOM [
 ]
 
 { #category : #tests }
+StAXParserTest >> testNextDOMElements [
+	| parser elements |
+
+	parser := StAXParser on: self sampleXML.
+	elements := OrderedCollection new.
+	parser skipUntil: [parser current isStartTag: 'one'].
+
+	[parser peek isStartTag]
+		whileTrue: [elements addLast: parser nextDOM].
+
+	self
+		assert: (elements allSatisfy: [:each | each isElement]);
+		assert: (elements collect: [:each | each name]) asArray = #('two' 'four' 'five' 'six');
+		assert: (parser next isEndTag: 'one').
+]
+
+{ #category : #tests }
 StAXParserTest >> testNextDOMInheritsConfiguration [
 	| parser configuration nodeConfiguration |
 
@@ -324,29 +341,79 @@ StAXParserTest >> testNextDOMInheritsConfiguration [
 
 { #category : #tests }
 StAXParserTest >> testNextUntil [
-	| parser |
+	| parser events |
 
 	parser := StAXParser on: self sampleXML.
-	self assertIsSampleXMLEvents: (parser nextUntil: [parser atEnd]).
+	events := parser nextUntil: [parser peek isStartTag: 'two'].
 	self
-		assert: (parser nextUntil: [false]) isEmpty;
-		assert: (parser nextUntil: [true]) isEmpty.
+		assert: events size = 2;
+		assert: events first isStartDocument;
+		assert: (events second isStartTag: 'one');
+		assert: (parser next isStartTag: 'two').
+
+	self assertIsSampleXMLEvents:
+		((StAXParser on: self sampleXML) nextUntil: [false]).
+	self assert:
+		((StAXParser on: self sampleXML) nextUntil: [true]) isEmpty.
 ]
 
 { #category : #tests }
 StAXParserTest >> testNextWhile [
-	| parser |
+	| parser events |
 
 	parser := StAXParser on: self sampleXML.
-	self assertIsSampleXMLEvents: (parser nextWhile: [parser atEnd not]).
+	events := parser nextWhile: [(parser peek isStartTag: 'two') not].
 	self
-		assert: (parser nextWhile: [false]) isEmpty;
-		assert: (parser nextWhile: [true]) isEmpty.
+		assert: events size = 2;
+		assert: events first isStartDocument;
+		assert: (events second isStartTag: 'one');
+		assert: (parser next isStartTag: 'two').
+
+	self assertIsSampleXMLEvents:
+		((StAXParser on: self sampleXML) nextWhile: [true]).
+	self assert:
+		((StAXParser on: self sampleXML) nextWhile: [false]) isEmpty.
 ]
 
 { #category : #tests }
 StAXParserTest >> testParseDocument [
 	self assertIsSampleXMLEvents: (StAXParser on: self sampleXML) parseDocument
+]
+
+{ #category : #tests }
+StAXParserTest >> testParseDocumentUntil [
+	| parser events |
+
+	parser := StAXParser on: self sampleXML.
+	events := parser parseDocumentUntil: [parser peek isStartTag: 'two'].
+	self
+		assert: events size = 2;
+		assert: events first isStartDocument;
+		assert: (events second isStartTag: 'one');
+		assert: (parser next isStartTag: 'two').
+
+	self assertIsSampleXMLEvents:
+		((StAXParser on: self sampleXML) parseDocumentUntil: [false]).
+	self assert:
+		((StAXParser on: self sampleXML) parseDocumentUntil: [true]) isEmpty.
+]
+
+{ #category : #tests }
+StAXParserTest >> testParseDocumentWhile [
+	| parser events |
+
+	parser := StAXParser on: self sampleXML.
+	events := parser parseDocumentWhile: [(parser peek isStartTag: 'two') not].
+	self
+		assert: events size = 2;
+		assert: events first isStartDocument;
+		assert: (events second isStartTag: 'one');
+		assert: (parser next isStartTag: 'two').
+
+	self assertIsSampleXMLEvents:
+		((StAXParser on: self sampleXML) parseDocumentWhile: [true]).
+	self assert:
+		((StAXParser on: self sampleXML) parseDocumentWhile: [false]) isEmpty.
 ]
 
 { #category : #tests }
@@ -411,6 +478,40 @@ StAXParserTest >> testSkip [
 	self assert: parser atEnd.
 	parser skip: events size.
 	self assert: parser atEnd.
+]
+
+{ #category : #tests }
+StAXParserTest >> testSkipUntil [
+	| parser |
+
+	(parser := StAXParser on: self sampleXML)
+		skipUntil: [parser peek isStartTag: 'three'].
+	self assert: (parser next isStartTag: 'three').
+
+	(parser := StAXParser on: self sampleXML)
+		skipUntil: [false].
+	self assert: parser atEnd.
+
+	(parser := StAXParser on: self sampleXML)
+		skipUntil: [true].
+	self assert: parser next isStartDocument.
+]
+
+{ #category : #tests }
+StAXParserTest >> testSkipWhile [
+	| parser |
+
+	(parser := StAXParser on: self sampleXML)
+		skipWhile: [(parser peek isStartTag: 'three') not].
+	self assert: (parser next isStartTag: 'three').
+
+	(parser := StAXParser on: self sampleXML)
+		skipWhile: [true].
+	self assert: parser atEnd.
+
+	(parser := StAXParser on: self sampleXML)
+		skipWhile: [false].
+	self assert: parser next isStartDocument.
 ]
 
 { #category : #tests }
