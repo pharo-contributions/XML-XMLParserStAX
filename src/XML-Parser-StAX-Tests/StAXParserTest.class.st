@@ -197,7 +197,9 @@ StAXParserTest >> testAsDOMInheritsConfiguration [
 		deny: nodeConfiguration isValidating;
 		assert: nodeConfiguration parserHandlerClass = XMLDOMParser;
 		assert: nodeConfiguration parserLimits == configuration parserLimits;
-		assert: nodeConfiguration entityConfiguration == configuration entityConfiguration.
+		assert: nodeConfiguration entityConfiguration == configuration entityConfiguration;
+		assert: nodeConfiguration preservesCDataNodes = configuration usesSeparateCDataEvents;
+		assert: nodeConfiguration preservesCommentNodes = configuration skipsCommentEvents not.
 ]
 
 { #category : #tests }
@@ -336,7 +338,9 @@ StAXParserTest >> testNextDOMInheritsConfiguration [
 		deny: nodeConfiguration isValidating;
 		assert: nodeConfiguration parserHandlerClass = XMLDOMParser;
 		assert: nodeConfiguration parserLimits == configuration parserLimits;
-		assert: nodeConfiguration entityConfiguration == configuration entityConfiguration.
+		assert: nodeConfiguration entityConfiguration == configuration entityConfiguration;
+		assert: nodeConfiguration preservesCDataNodes = configuration usesSeparateCDataEvents;
+		assert: nodeConfiguration preservesCommentNodes = configuration skipsCommentEvents not.
 ]
 
 { #category : #tests }
@@ -515,35 +519,6 @@ StAXParserTest >> testSkipWhile [
 ]
 
 { #category : #tests }
-StAXParserTest >> testSkipsCDataEvents [
-	| xml parser |
-
-	xml := '
-		<test>
-			<![CDATA[cdata text]]>
-		</test>'.
-	parser := StAXParser on: xml.
-	parser next: 2.
-	self
-		assert: parser peek isCData;
-		assert: (parser next isText: 'cdata text').
-
-	(parser := StAXParser on: xml)
-		skipsCDataEvents: false;
-		next: 2.
-	self
-		assert: parser peek isCData;
-		assert: (parser next isText: 'cdata text').
-
-	(parser := StAXParser on: xml)
-		skipsCDataEvents: true;
-		next: 2.
-	self
-		deny: parser peek isCData;
-		assert: (parser next isText: 'cdata text').
-]
-
-{ #category : #tests }
 StAXParserTest >> testSkipsCommentEvents [
 	| xml parser |
 
@@ -592,6 +567,35 @@ StAXParserTest >> testSkipsPIEvents [
 { #category : #tests }
 StAXParserTest >> testUpToEnd [
 	self assertIsSampleXMLEvents: (StAXParser on: self sampleXML) upToEnd
+]
+
+{ #category : #tests }
+StAXParserTest >> testUsesSeparateCDataEvents [
+	| xml parser |
+
+	xml := '
+		<test>
+			<![CDATA[cdata text]]>
+		</test>'.
+	parser := StAXParser on: xml.
+	parser next: 2.
+	self
+		assert: parser peek isCData;
+		assert: (parser next isText: 'cdata text').
+
+	(parser := StAXParser on: xml)
+		usesSeparateCDataEvents: true;
+		next: 2.
+	self
+		assert: parser peek isCData;
+		assert: (parser next isText: 'cdata text').
+
+	(parser := StAXParser on: xml)
+		usesSeparateCDataEvents: false;
+		next: 2.
+	self
+		deny: parser peek isCData;
+		assert: (parser next isText: 'cdata text').
 ]
 
 { #category : #tests }
