@@ -66,9 +66,9 @@ StAXParser >> collect: aBlock [
 
 { #category : #'handling - lexical' }
 StAXParser >> comment: aCommentString [
-	(self isInInternalSubset
-		or: [self skipsCommentEvents])
-		ifFalse: [
+	(self isInContent
+		and: [self skipsCommentEvents not])
+		ifTrue: [
 			self addEvent:
 				(StAXCommentEvent string: aCommentString)]
 ]
@@ -220,9 +220,9 @@ StAXParser >> peek [
 
 { #category : #'handling - content' }
 StAXParser >> processingInstruction: aTargetString data: aDataString [
-	(self isInInternalSubset
-		or: [self skipsPIEvents])
-		ifFalse: [
+	(self isInContent
+		and: [self skipsPIEvents not])
+		ifTrue: [
 			self addEvent:
 				(StAXPIEvent
 					target: aTargetString
