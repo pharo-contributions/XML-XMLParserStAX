@@ -50,7 +50,7 @@ StAXParser >> atEnd [
 StAXParser >> characters: aString [
 	self addEvent:
 		((self isInCDataSection
-			and: [self skipsCDataEvents not])
+			and: [self usesSeparateCDataEvents])
 			ifTrue: [StAXCDataEvent string: aString]
 			ifFalse: [StAXTextEvent string: aString])
 ]
@@ -258,16 +258,6 @@ StAXParser >> skipWhile: aBlock [
 ]
 
 { #category : #configuring }
-StAXParser >> skipsCDataEvents [
-	^ self configuration skipsCDataEvents
-]
-
-{ #category : #configuring }
-StAXParser >> skipsCDataEvents: aBoolean [
-	self configuration skipsCDataEvents: aBoolean
-]
-
-{ #category : #configuring }
 StAXParser >> skipsCommentEvents [
 	^ self configuration skipsCommentEvents
 ]
@@ -305,4 +295,14 @@ StAXParser >> startElement: aQualifiedName prefix: aPrefix uri: aURI localName: 
 { #category : #accessing }
 StAXParser >> upToEnd [
 	^ self nextWhile: [self atEnd not]
+]
+
+{ #category : #configuring }
+StAXParser >> usesSeparateCDataEvents [
+	^ self configuration usesSeparateCDataEvents
+]
+
+{ #category : #configuring }
+StAXParser >> usesSeparateCDataEvents: aBoolean [
+	self configuration usesSeparateCDataEvents: aBoolean
 ]

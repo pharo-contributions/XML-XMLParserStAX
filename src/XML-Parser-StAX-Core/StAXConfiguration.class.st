@@ -5,9 +5,9 @@ Class {
 	#name : #StAXConfiguration,
 	#superclass : #XMLConfiguration,
 	#instVars : [
-		'skipsCDataEvents',
 		'skipsCommentEvents',
-		'skipsPIEvents'
+		'skipsPIEvents',
+		'usesSeparateCDataEvents'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
@@ -19,7 +19,9 @@ StAXConfiguration >> asDOMConfiguration [
 		usesNamespaces: self usesNamespaces;
 		requiresDocumentConstraints: self requiresDocumentConstraints;
 		parserLimits: self parserLimits;
-		entityConfiguration: self entityConfiguration
+		entityConfiguration: self entityConfiguration;
+		preservesCDataNodes: self usesSeparateCDataEvents;
+		preservesCommentNodes: self skipsCommentEvents not
 ]
 
 { #category : #accessing }
@@ -27,23 +29,13 @@ StAXConfiguration >> defaultParserHandlerClass [
 	^ StAXParser
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 StAXConfiguration >> initialize [
 	super initialize.
 
-	skipsCDataEvents := false.
+	usesSeparateCDataEvents := true.
 	skipsCommentEvents := false.
 	skipsPIEvents := false.
-]
-
-{ #category : #accessing }
-StAXConfiguration >> skipsCDataEvents [
-	^ skipsCDataEvents
-]
-
-{ #category : #accessing }
-StAXConfiguration >> skipsCDataEvents: aBoolean [
-	skipsCDataEvents := aBoolean
 ]
 
 { #category : #accessing }
@@ -64,4 +56,14 @@ StAXConfiguration >> skipsPIEvents [
 { #category : #accessing }
 StAXConfiguration >> skipsPIEvents: aBoolean [
 	skipsPIEvents := aBoolean
+]
+
+{ #category : #accessing }
+StAXConfiguration >> usesSeparateCDataEvents [
+	^ usesSeparateCDataEvents
+]
+
+{ #category : #accessing }
+StAXConfiguration >> usesSeparateCDataEvents: aBoolean [
+	usesSeparateCDataEvents := aBoolean
 ]
