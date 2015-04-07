@@ -179,10 +179,8 @@ StAXParser >> nextWhile: aBlock [
 ]
 
 { #category : #initialization }
-StAXParser >> on: aStringOrStream documentURI: aURI [
-	super
-		on: aStringOrStream
-		documentURI: aURI.
+StAXParser >> on: aStringOrStream [
+	super on: aStringOrStream.
 
 	parser := self parser.
 	current := StAXInitialEvent new.
