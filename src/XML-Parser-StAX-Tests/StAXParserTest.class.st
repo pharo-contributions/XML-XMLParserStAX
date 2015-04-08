@@ -355,6 +355,13 @@ StAXParserTest >> testNextUntil [
 		assert: (events second isStartTag: 'one');
 		assert: (parser next isStartTag: 'two').
 
+	parser := StAXParser on: self sampleXML.
+	events := parser nextUntil: [parser current isStartTag: 'six'].
+	self
+		assert: events size = 17;
+		assert: (events last isStartTag: 'six');
+		assert: (parser next isEndTag: 'six').
+
 	self assertIsSampleXMLEvents:
 		((StAXParser on: self sampleXML) nextUntil: [false]).
 	self assert:
@@ -372,6 +379,13 @@ StAXParserTest >> testNextWhile [
 		assert: events first isStartDocument;
 		assert: (events second isStartTag: 'one');
 		assert: (parser next isStartTag: 'two').
+
+	parser := StAXParser on: self sampleXML.
+	events := parser nextWhile: [(parser current isStartTag: 'six') not].
+	self
+		assert: events size = 17;
+		assert: (events last isStartTag: 'six');
+		assert: (parser next isEndTag: 'six').
 
 	self assertIsSampleXMLEvents:
 		((StAXParser on: self sampleXML) nextWhile: [true]).
@@ -396,6 +410,13 @@ StAXParserTest >> testParseDocumentUntil [
 		assert: (events second isStartTag: 'one');
 		assert: (parser next isStartTag: 'two').
 
+	parser := StAXParser on: self sampleXML.
+	events := parser parseDocumentUntil: [parser current isStartTag: 'six'].
+	self
+		assert: events size = 17;
+		assert: (events last isStartTag: 'six');
+		assert: (parser next isEndTag: 'six').
+
 	self assertIsSampleXMLEvents:
 		((StAXParser on: self sampleXML) parseDocumentUntil: [false]).
 	self assert:
@@ -413,6 +434,13 @@ StAXParserTest >> testParseDocumentWhile [
 		assert: events first isStartDocument;
 		assert: (events second isStartTag: 'one');
 		assert: (parser next isStartTag: 'two').
+
+	parser := StAXParser on: self sampleXML.
+	events := parser parseDocumentWhile: [(parser current isStartTag: 'six') not].
+	self
+		assert: events size = 17;
+		assert: (events last isStartTag: 'six');
+		assert: (parser next isEndTag: 'six').
 
 	self assertIsSampleXMLEvents:
 		((StAXParser on: self sampleXML) parseDocumentWhile: [true]).
@@ -497,6 +525,10 @@ StAXParserTest >> testSkipUntil [
 	self assert: parser atEnd.
 
 	(parser := StAXParser on: self sampleXML)
+		skipUntil: [parser current isStartTag: 'six'].
+	self assert: (parser next isEndTag: 'six').
+
+	(parser := StAXParser on: self sampleXML)
 		skipUntil: [true].
 	self assert: parser next isStartDocument.
 ]
@@ -512,6 +544,10 @@ StAXParserTest >> testSkipWhile [
 	(parser := StAXParser on: self sampleXML)
 		skipWhile: [true].
 	self assert: parser atEnd.
+
+	(parser := StAXParser on: self sampleXML)
+		skipWhile: [(parser current isStartTag: 'six') not].
+	self assert: (parser next isEndTag: 'six').
 
 	(parser := StAXParser on: self sampleXML)
 		skipWhile: [false].
