@@ -26,6 +26,7 @@ StAXTagEvent class >> named: aName [
 
 { #category : #testing }
 StAXTagEvent >> isNamed: aTagName [
+	"tests if tag has same qualified or local name as argument"
 	^ aTagName
 		isQualifiedName: self name
 		orLocalName: self localName

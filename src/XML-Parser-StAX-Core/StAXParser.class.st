@@ -1,5 +1,5 @@
 "
-This is a StAX-style pull parser for XMLParser that provides a stream-like interface for ""pulling"" XML events and optionally converting them to DOM. It is a fork of XMLPullParser and is MIT licensed.
+This is a StAX-style pull parser for XMLParser that provides a streaming interface for ""pulling"" XML events and optionally converting them to DOM. It is a fork of XMLPullParser and is MIT licensed.
 
 Examples:
 	""get first book element as an XMLElement object:""
@@ -34,11 +34,8 @@ StAXParser >> addEvent: anEvent [
 
 { #category : #converting }
 StAXParser >> asDOMBuilder [
-	| builder |
-
-	builder := StAXDOMBuilder on: self.
-	builder configuration: self configuration asDOMConfiguration.
-	^ builder.
+	^ (self domBuilderClass on: self)
+		configuration: self configuration asDOMConfiguration
 ]
 
 { #category : #testing }
@@ -105,6 +102,11 @@ StAXParser >> detect: aBlock ifNone: anExceptionBlock [
 { #category : #enumerating }
 StAXParser >> do: aBlock [
 	[self atEnd] whileFalse: [aBlock value: self next]
+]
+
+{ #category : #private }
+StAXParser >> domBuilderClass [
+	^ StAXDOMBuilder
 ]
 
 { #category : #'handling - content' }
@@ -189,16 +191,19 @@ StAXParser >> on: aStringOrStream [
 
 { #category : #parsing }
 StAXParser >> parseDocument [
+	"returns all events"
 	^ self upToEnd
 ]
 
 { #category : #parsing }
 StAXParser >> parseDocumentUntil: aBlock [
+	"returns events until aBlock evaluates true"
 	^ self nextUntil: aBlock
 ]
 
 { #category : #parsing }
 StAXParser >> parseDocumentWhile: aBlock [
+	"returns events while aBlock evaluates true"
 	^ self nextWhile: aBlock
 ]
 

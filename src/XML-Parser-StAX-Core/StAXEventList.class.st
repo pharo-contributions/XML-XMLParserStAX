@@ -24,7 +24,7 @@ StAXEventList >> asDOM [
 StAXEventList >> asDOMBuilder [
 	| builder |
 
-	builder := StAXDOMBuilder on: self.
+	builder := self domBuilderClass on: self.
 	configuration
 		ifNotNil: [builder configuration: configuration asDOMConfiguration].
 	^ builder.
@@ -33,4 +33,9 @@ StAXEventList >> asDOMBuilder [
 { #category : #initialization }
 StAXEventList >> configuration: aConfiguration [
 	configuration := aConfiguration
+]
+
+{ #category : #private }
+StAXEventList >> domBuilderClass [
+	^ StAXDOMBuilder
 ]
