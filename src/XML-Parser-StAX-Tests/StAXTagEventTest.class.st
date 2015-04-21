@@ -26,7 +26,29 @@ StAXTagEventTest >> testIsNamed [
 	tag name: 'one:two'.
 	self
 		assert: (tag isNamed: 'two');
-		assert: (tag isNamed: 'one:two').
+		assert: (tag isNamed: 'one:two');
+		deny: (tag isNamed: 'one').
+]
+
+{ #category : #tests }
+StAXTagEventTest >> testIsNamedAny [
+	| tag |
+
+	tag := self newEvent.
+	self
+		deny: (tag isNamedAny: #('two' 'one'));
+		deny: (tag isNamedAny: #('two' 'one:two')).
+
+	tag name: 'one'.
+	self
+		assert: (tag isNamedAny: #('two' 'one'));
+		deny: (tag isNamedAny: #('two' 'one:two')).
+
+	tag name: 'one:two'.
+	self
+		assert: (tag isNamedAny: #('two' 'one'));
+		assert: (tag isNamedAny: #('two' 'one:two'));
+		deny: (tag isNamedAny: #('one' 'two:one')).
 ]
 
 { #category : #tests }

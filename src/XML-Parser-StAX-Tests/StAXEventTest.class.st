@@ -36,17 +36,17 @@ StAXEventTest >> testIsEndDocument [
 
 { #category : #tests }
 StAXEventTest >> testIsEndTag [
-	self
-		deny: self newEvent isEndTag;
-		deny: (self newEvent isEndTag: 'test')
+	self deny: self newEvent isEndTag
 ]
 
 { #category : #tests }
-StAXEventTest >> testIsEndTagNamespaceURI [
-	self deny:
-		(self newEvent
-			isEndTag: 'one'
-			namespaceURI: 'two')
+StAXEventTest >> testIsEndTagNamed [
+	self deny: (self newEvent isEndTagNamed: 'test')
+]
+
+{ #category : #tests }
+StAXEventTest >> testIsEndTagNamedAny [
+	self deny: (self newEvent isEndTagNamed: #('one' 'two' 'three'))
 ]
 
 { #category : #tests }
@@ -66,17 +66,17 @@ StAXEventTest >> testIsStartDocument [
 
 { #category : #tests }
 StAXEventTest >> testIsStartTag [
-	self
-		deny: self newEvent isStartTag;
-		deny: (self newEvent isStartTag: 'test')
+	self deny: self newEvent isStartTag
 ]
 
 { #category : #tests }
-StAXEventTest >> testIsStartTagNamespaceURI [
-	self deny:
-		(self newEvent
-			isStartTag: 'one'
-			namespaceURI: 'two')
+StAXEventTest >> testIsStartTagNamed [
+	self deny: (self newEvent isStartTagNamed: 'test')
+]
+
+{ #category : #tests }
+StAXEventTest >> testIsStartTagNamedAny [
+	self deny: (self newEvent isStartTagNamedAny: #('one' 'two' 'three'))
 ]
 
 { #category : #tests }
