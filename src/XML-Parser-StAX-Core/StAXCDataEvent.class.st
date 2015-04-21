@@ -9,7 +9,7 @@ Class {
 
 { #category : #building }
 StAXCDataEvent >> buildWith: aBuilder [
-	aBuilder cdataEvent: self
+	aBuilder buildCDataEvent: self
 ]
 
 { #category : #testing }

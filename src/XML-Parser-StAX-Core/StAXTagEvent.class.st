@@ -33,6 +33,14 @@ StAXTagEvent >> isNamed: aTagName [
 ]
 
 { #category : #testing }
+StAXTagEvent >> isNamedAny: aTagNameCollection [
+	"tests if tag qualified or local name is in collection"
+	^ aTagNameCollection
+		includesQualifiedName: self name
+		orLocalName: self localName
+]
+
+{ #category : #testing }
 StAXTagEvent >> isTag [
 	^ true
 ]

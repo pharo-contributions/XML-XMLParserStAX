@@ -17,7 +17,7 @@ StAXTextEvent class >> string: aString [
 
 { #category : #building }
 StAXTextEvent >> buildWith: aBuilder [
-	aBuilder textEvent: self
+	aBuilder buildTextEvent: self
 ]
 
 { #category : #testing }

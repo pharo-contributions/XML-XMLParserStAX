@@ -32,12 +32,12 @@ StAXEvent >> isEndTag [
 ]
 
 { #category : #testing }
-StAXEvent >> isEndTag: aTagName [
+StAXEvent >> isEndTagNamed: aTagName [
 	^ false
 ]
 
 { #category : #testing }
-StAXEvent >> isEndTag: aTagName namespaceURI: aURI [
+StAXEvent >> isEndTagNamedAny: aTagName [
 	^ false
 ]
 
@@ -62,12 +62,12 @@ StAXEvent >> isStartTag [
 ]
 
 { #category : #testing }
-StAXEvent >> isStartTag: aTagName [
+StAXEvent >> isStartTagNamed: aTagName [
 	^ false
 ]
 
 { #category : #testing }
-StAXEvent >> isStartTag: aTagName namespaceURI: aURI [
+StAXEvent >> isStartTagNamedAny: aTagName [
 	^ false
 ]
 

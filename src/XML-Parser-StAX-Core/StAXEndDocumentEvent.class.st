@@ -9,7 +9,7 @@ Class {
 
 { #category : #building }
 StAXEndDocumentEvent >> buildWith: aBuilder [
-	aBuilder endDocumentEvent: self
+	aBuilder buildEndDocumentEvent: self
 ]
 
 { #category : #testing }

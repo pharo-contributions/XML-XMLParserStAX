@@ -1,12 +1,16 @@
 "
-This is a StAX-style pull parser for XMLParser that provides a streaming interface for ""pulling"" XML events and optionally converting them to DOM. It is a fork of XMLPullParser and is MIT licensed.
+This is a pull parser for XMLParser that provides a streaming interface for ""pulling"" XML events and also supports pull-style DOM parsing for dynamically converting events into DOM nodes.
 
 Examples:
-	""get first book element as an XMLElement object:""
-	element := 
-		(parser := StAXParser on: xml)
-			skipUntil: [parser peek isStartTag: 'book'];
-			nextDOM.
+	parser := StAXParser on: xml.
+
+	""get first <item> element as an XMLElement object""
+	itemElement := parser nextElementNamed: ''item''.
+
+	""get next DOM node of any type""
+	node := parser nextNode.
+
+This is a fork of XMLPullParser and is MIT licensed.
 "
 Class {
 	#name : #StAXParser,
@@ -16,7 +20,8 @@ Class {
 		'current',
 		'peek',
 		'eventQueue',
-		'lastEventAdded'
+		'lastEventAdded',
+		'domBuilder'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
@@ -30,12 +35,6 @@ StAXParser >> addEvent: anEvent [
 				ifFalse: [peek := eventQueue removeFirst]]
 		ifNotNil: [eventQueue addLast: anEvent].
 	lastEventAdded := anEvent.
-]
-
-{ #category : #converting }
-StAXParser >> asDOMBuilder [
-	^ (self domBuilderClass on: self)
-		configuration: self configuration asDOMConfiguration
 ]
 
 { #category : #testing }
@@ -104,6 +103,14 @@ StAXParser >> do: aBlock [
 	[self atEnd] whileFalse: [aBlock value: self next]
 ]
 
+{ #category : #configuring }
+StAXParser >> domBuilder [
+	^ domBuilder ifNil: [
+		domBuilder :=
+			(self domBuilderClass on: self)
+				configuration: self configuration domConfiguration]
+]
+
 { #category : #private }
 StAXParser >> domBuilderClass [
 	^ StAXDOMBuilder
@@ -142,20 +149,38 @@ StAXParser >> next [
 
 { #category : #accessing }
 StAXParser >> next: anInteger [ 
-	| eventList |
+	| eventList i |
 
 	eventList := self newEventList.
-	1 to: anInteger do: [:each |
-		self atEnd
-			ifTrue: [^ eventList].
-		eventList addLast: self next].
+	i := 1.
+	[i > anInteger
+		or: [self atEnd]]
+		whileFalse: [
+			eventList addLast: self next.
+			i := i + 1].
 	^ eventList.
 ]
 
-{ #category : #accessing }
-StAXParser >> nextDOM [
-	"returns the next event(s) as a DOM tree"
-	^ self asDOMBuilder build
+{ #category : #'accessing - nodes' }
+StAXParser >> nextElement [
+	^ self domBuilder buildNextElement
+]
+
+{ #category : #'accessing - nodes' }
+StAXParser >> nextElementNamed: aName [
+	^ self domBuilder buildNextElementNamed: aName
+]
+
+{ #category : #'accessing - nodes' }
+StAXParser >> nextElementNamed: aName namespaceURI: aURI [
+	^ self domBuilder
+		buildNextElementNamed: aName
+		namespaceURI: aURI
+]
+
+{ #category : #'accessing - nodes' }
+StAXParser >> nextNode [
+	^ self domBuilder buildNextNode
 ]
 
 { #category : #accessing }
@@ -178,6 +203,16 @@ StAXParser >> nextWhile: aBlock [
 		and: [aBlock value]]
 		whileTrue: [eventList addLast: self next].
 	^ eventList.
+]
+
+{ #category : #configuring }
+StAXParser >> nodeFactory [
+	^ self configuration nodeFactory
+]
+
+{ #category : #configuring }
+StAXParser >> nodeFactory: aNodeFactory [
+	self configuration nodeFactory: aNodeFactory
 ]
 
 { #category : #initialization }
@@ -297,7 +332,7 @@ StAXParser >> startElement: aQualifiedName prefix: aPrefix uri: aURI localName: 
 
 { #category : #accessing }
 StAXParser >> upToEnd [
-	^ self nextWhile: [self atEnd not]
+	^ self nextWhile: [true]
 ]
 
 { #category : #configuring }

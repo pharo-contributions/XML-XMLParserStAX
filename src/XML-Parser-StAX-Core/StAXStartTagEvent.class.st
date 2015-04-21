@@ -42,7 +42,7 @@ StAXStartTagEvent >> attributes [
 
 { #category : #building }
 StAXStartTagEvent >> buildWith: aBuilder [
-	aBuilder startTagEvent: self
+	aBuilder buildStartTagEvent: self
 ]
 
 { #category : #testing }
@@ -67,14 +67,13 @@ StAXStartTagEvent >> isStartTag [
 ]
 
 { #category : #testing }
-StAXStartTagEvent >> isStartTag: aTagName [
+StAXStartTagEvent >> isStartTagNamed: aTagName [
 	^ self isNamed: aTagName
 ]
 
 { #category : #testing }
-StAXStartTagEvent >> isStartTag: aTagName namespaceURI: aURI [
-	^ (self isNamed: aTagName)
-		and: [self namespaceURI = aURI]
+StAXStartTagEvent >> isStartTagNamedAny: aTagNameCollection [
+	^ self isNamedAny: aTagNameCollection
 ]
 
 { #category : #private }

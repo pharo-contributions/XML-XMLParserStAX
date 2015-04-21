@@ -16,23 +16,51 @@ StAXEventList class >> configuration: aConfiguration [
 ]
 
 { #category : #converting }
-StAXEventList >> asDOM [
-	^ self asDOMBuilder build
+StAXEventList >> asElement [
+	^ self domBuilder buildNextElement
 ]
 
 { #category : #converting }
-StAXEventList >> asDOMBuilder [
-	| builder |
+StAXEventList >> asElementNamed: aName [
+	^ self domBuilder buildNextElementNamed: aName
+]
 
-	builder := self domBuilderClass on: self.
-	configuration
-		ifNotNil: [builder configuration: configuration asDOMConfiguration].
-	^ builder.
+{ #category : #converting }
+StAXEventList >> asElementNamed: aName namespaceURI: aURI [
+	^ self domBuilder
+		buildNextElementNamed: aName
+		namespaceURI: aURI
+]
+
+{ #category : #converting }
+StAXEventList >> asNode [
+	^ self domBuilder buildNextNode
+]
+
+{ #category : #initialization }
+StAXEventList >> configuration [
+	^ configuration ifNil: [configuration := self configurationClass new]
 ]
 
 { #category : #initialization }
 StAXEventList >> configuration: aConfiguration [
 	configuration := aConfiguration
+]
+
+{ #category : #private }
+StAXEventList >> configurationClass [
+	^ StAXConfiguration
+]
+
+{ #category : #copying }
+StAXEventList >> copyEmpty [
+	^ super copyEmpty configuration: configuration
+]
+
+{ #category : #converting }
+StAXEventList >> domBuilder [
+	^ (self domBuilderClass on: self)
+		configuration: self configuration domConfiguration
 ]
 
 { #category : #private }

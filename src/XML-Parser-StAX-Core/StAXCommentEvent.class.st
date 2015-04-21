@@ -17,7 +17,7 @@ StAXCommentEvent class >> string: aString [
 
 { #category : #building }
 StAXCommentEvent >> buildWith: aBuilder [
-	aBuilder commentEvent: self
+	aBuilder buildCommentEvent: self
 ]
 
 { #category : #testing }

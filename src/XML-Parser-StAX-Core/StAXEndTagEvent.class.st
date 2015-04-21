@@ -9,7 +9,7 @@ Class {
 
 { #category : #building }
 StAXEndTagEvent >> buildWith: aBuilder [
-	aBuilder endTagEvent: self
+	aBuilder buildEndTagEvent: self
 ]
 
 { #category : #testing }
@@ -18,13 +18,13 @@ StAXEndTagEvent >> isEndTag [
 ]
 
 { #category : #testing }
-StAXEndTagEvent >> isEndTag: aTagName [
+StAXEndTagEvent >> isEndTagNamed: aTagName [
 	^ self isNamed: aTagName
 ]
 
 { #category : #testing }
-StAXEndTagEvent >> isEndTag: aTagName namespaceURI: aURI [
-	^ (self isNamed: aTagName) and: [self namespaceURI = aURI]
+StAXEndTagEvent >> isEndTagNamedAny: aTagNameCollection [
+	^ self isNamedAny: aTagNameCollection
 ]
 
 { #category : #initialization }

@@ -20,7 +20,7 @@ StAXPIEvent class >> target: aTargetString data: aDataString [
 
 { #category : #building }
 StAXPIEvent >> buildWith: aBuilder [
-	aBuilder piEvent: self
+	aBuilder buildPIEvent: self
 ]
 
 { #category : #accessing }

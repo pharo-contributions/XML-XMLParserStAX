@@ -6,9 +6,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'configuration',
+		'eventStream',
 		'nodeStack',
-		'currentRoot',
-		'eventStream'
+		'currentNode'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
@@ -18,21 +18,114 @@ StAXDOMBuilder class >> on: aStreamOrCollection [
 	^ self new on: aStreamOrCollection
 ]
 
-{ #category : #building }
-StAXDOMBuilder >> build [
-	[eventStream atEnd or: [self isBuilt]]
-		whileFalse: [eventStream next buildWith: self].
-	^ self currentRoot.
+{ #category : #'building - events' }
+StAXDOMBuilder >> buildCDataEvent: anEvent [
+	self nodeStackTopAddNode: (self nodeFactory newCData: anEvent string)
 ]
 
 { #category : #'building - events' }
-StAXDOMBuilder >> cdataEvent: anEvent [
-	self topNodeAdd: (self nodeFactory newCData: anEvent string)
+StAXDOMBuilder >> buildCommentEvent: anEvent [
+	self nodeStackTopAddNode: (self nodeFactory newComment: anEvent string)
 ]
 
 { #category : #'building - events' }
-StAXDOMBuilder >> commentEvent: anEvent [
-	self topNodeAdd: (self nodeFactory newComment: anEvent string)
+StAXDOMBuilder >> buildEndDocumentEvent: anEvent [
+	self popNode
+]
+
+{ #category : #'building - events' }
+StAXDOMBuilder >> buildEndTagEvent: anEvent [
+	self popNode
+]
+
+{ #category : #'building - nodes' }
+StAXDOMBuilder >> buildNextElement [
+	[eventStream atEnd
+		or: [eventStream peek isStartTag]]
+		whileFalse: [eventStream next].
+	^ self buildNextNode.
+]
+
+{ #category : #'building - nodes' }
+StAXDOMBuilder >> buildNextElementNamed: aName [
+	[eventStream atEnd
+		or: [eventStream peek isStartTagNamed: aName]]
+		whileFalse: [eventStream next].
+	^ self buildNextNode.
+]
+
+{ #category : #'building - nodes' }
+StAXDOMBuilder >> buildNextElementNamed: aName namespaceURI: aURI [
+	[eventStream atEnd
+		or: [(eventStream peek isStartTagNamed: aName)
+			and: [eventStream peek namespaceURI = aURI]]]
+		whileFalse: [eventStream next].
+	^ self buildNextNode.
+]
+
+{ #category : #private }
+StAXDOMBuilder >> buildNextEvent [
+	eventStream next buildWith: self
+]
+
+{ #category : #'building - nodes' }
+StAXDOMBuilder >> buildNextNode [
+	| result |
+
+	eventStream atEnd
+		ifFalse: [
+			[eventStream atEnd
+				or: [self hasBuiltCurrentNode]]
+				whileFalse: [self buildNextEvent].
+			result := self currentNode.
+			self currentNode: nil].
+	^ result.
+]
+
+{ #category : #'building - events' }
+StAXDOMBuilder >> buildPIEvent: anEvent [
+	self nodeStackTopAddNode:
+		(self nodeFactory newPI
+			target: anEvent target;
+			data: anEvent data)
+]
+
+{ #category : #'building - events' }
+StAXDOMBuilder >> buildStartDocumentEvent: anEvent [
+	| document |
+
+	(document := self nodeFactory newDocument)
+		configuration: self configuration.
+	self
+		currentNode: document;
+		pushNode: document.
+]
+
+{ #category : #'building - events' }
+StAXDOMBuilder >> buildStartTagEvent: anEvent [
+	| element |
+
+	element :=
+		(self nodeFactory
+			classForElement: anEvent name
+			prefix: (anEvent name prefixBeforeLocalName: anEvent localName)
+			uri: anEvent namespaceURI
+			localName: anEvent localName) new.
+	element
+		configuration: self configuration;
+		setQualifiedName: anEvent name
+		localName: anEvent localName
+		attributes: anEvent attributes;
+		setNamespaceScope: anEvent namespaceScope.
+
+	self
+		nodeStackTopAddNode: element;
+		pushNode: element.
+]
+
+{ #category : #'building - events' }
+StAXDOMBuilder >> buildTextEvent: anEvent [
+	self nodeStackTopAddNode: (self nodeFactory newString: anEvent string)
 ]
 
 { #category : #accessing }
@@ -51,29 +144,24 @@ StAXDOMBuilder >> configurationClass [
 ]
 
 { #category : #accessing }
-StAXDOMBuilder >> currentRoot [
-	^ currentRoot
+StAXDOMBuilder >> currentNode [
+	^ currentNode
 ]
 
 { #category : #private }
-StAXDOMBuilder >> currentRoot: aNode [
-	currentRoot := aNode
-]
-
-{ #category : #'building - events' }
-StAXDOMBuilder >> endDocumentEvent: anEvent [
-	self popNode
-]
-
-{ #category : #'building - events' }
-StAXDOMBuilder >> endTagEvent: anEvent [
-	self popNode
+StAXDOMBuilder >> currentNode: aNode [
+	currentNode := aNode
 ]
 
 { #category : #testing }
-StAXDOMBuilder >> isBuilt [
-	^ self currentRoot notNil
+StAXDOMBuilder >> hasBuiltCurrentNode [
+	^ self currentNode notNil
 		and: [self nodeStack isEmpty]
+]
+
+{ #category : #private }
+StAXDOMBuilder >> newNodeList [
+	^ self nodeFactory nodeListClass new
 ]
 
 { #category : #accessing }
@@ -91,21 +179,20 @@ StAXDOMBuilder >> nodeStack [
 	^ nodeStack
 ]
 
+{ #category : #private }
+StAXDOMBuilder >> nodeStackTopAddNode: aNode [
+	self nodeStack lastOrNil
+		ifNil: [self currentNode: aNode]
+		ifNotNil: [:topNode | topNode addNode: aNode]
+]
+
 { #category : #initialization }
 StAXDOMBuilder >> on: aStreamOrCollection [
-	nodeStack := OrderedCollection new: 10.
 	eventStream :=
 		aStreamOrCollection isStream
 			ifTrue: [aStreamOrCollection]
 			ifFalse: [aStreamOrCollection readStream].
-]
-
-{ #category : #'building - events' }
-StAXDOMBuilder >> piEvent: anEvent [
-	self topNodeAdd:
-		(self nodeFactory newPI
-			target: anEvent target;
-			data: anEvent data)
+	nodeStack := OrderedCollection new: 10.
 ]
 
 { #category : #private }
@@ -118,54 +205,4 @@ StAXDOMBuilder >> popNode [
 { #category : #private }
 StAXDOMBuilder >> pushNode: aNode [
 	^ self nodeStack addLast: aNode
-]
-
-{ #category : #'building - events' }
-StAXDOMBuilder >> startDocumentEvent: anEvent [
-	| document |
-
-	(document := self nodeFactory newDocument)
-		configuration: self configuration.
-	self
-		currentRoot: document;
-		pushNode: document.
-]
-
-{ #category : #'building - events' }
-StAXDOMBuilder >> startTagEvent: anEvent [
-	| element |
-
-	element :=
-		(self nodeFactory
-			classForElement: anEvent name
-			prefix: (anEvent name prefixBeforeLocalName: anEvent localName)
-			uri: anEvent namespaceURI
-			localName: anEvent localName) new.
-	element
-		configuration: self configuration;
-		setQualifiedName: anEvent name
-		localName: anEvent localName
-		attributes: anEvent attributes;
-		setNamespaceScope: anEvent namespaceScope.
-
-	self
-		topNodeAdd: element;
-		pushNode: element.
-]
-
-{ #category : #'building - events' }
-StAXDOMBuilder >> textEvent: anEvent [
-	self topNodeAdd: (self nodeFactory newString: anEvent string)
-]
-
-{ #category : #private }
-StAXDOMBuilder >> topNode [
-	^ self nodeStack lastOrNil
-]
-
-{ #category : #private }
-StAXDOMBuilder >> topNodeAdd: aNode [
-	self topNode
-		ifNil: [self currentRoot: aNode]
-		ifNotNil: [:topNode | topNode addNode: aNode]
 ]
