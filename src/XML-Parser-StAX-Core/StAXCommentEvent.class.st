@@ -26,7 +26,8 @@ StAXCommentEvent >> isComment [
 ]
 
 { #category : #printing }
-StAXCommentEvent >> printBodyOn: aStream [
+StAXCommentEvent >> printOn: aStream [
+	super printOn: aStream.
 	aStream
 		nextPut: $(;
 		print: self string;

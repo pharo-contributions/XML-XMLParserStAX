@@ -87,23 +87,5 @@ StAXEvent >> isText: aString [
 ]
 
 { #category : #printing }
-StAXEvent >> printBodyOn: aStream [
-]
-
-{ #category : #printing }
-StAXEvent >> printNameOn: aStream [
-	aStream
-		nextPutAll: 'a ';
-		nextPutAll: self className asString
-]
-
-{ #category : #printing }
-StAXEvent >> printOn: aStream [
-	self
-		printNameOn: aStream;
-		printBodyOn: aStream
-]
-
-{ #category : #printing }
 StAXEvent >> writeXMLOn: aWriter [
 ]

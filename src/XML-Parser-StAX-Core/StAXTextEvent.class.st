@@ -31,7 +31,8 @@ StAXTextEvent >> isText: aString [
 ]
 
 { #category : #printing }
-StAXTextEvent >> printBodyOn: aStream [
+StAXTextEvent >> printOn: aStream [
+	super printOn: aStream.
 	aStream
 		nextPut: $(;
 		print: self string;

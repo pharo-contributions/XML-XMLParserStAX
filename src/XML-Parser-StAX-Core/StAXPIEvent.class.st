@@ -38,6 +38,15 @@ StAXPIEvent >> isPI [
 	^ true
 ]
 
+{ #category : #printing }
+StAXPIEvent >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		nextPut: $(;
+		print: self target;
+		nextPut: $)
+]
+
 { #category : #accessing }
 StAXPIEvent >> target [
 	^ target ifNil: [target := ''].
@@ -52,5 +61,6 @@ StAXPIEvent >> target: aString [
 StAXPIEvent >> writeXMLOn: aWriter [
 	aWriter pi
 		target: self target;
-		data: self data
+		data: self data;
+		write
 ]
