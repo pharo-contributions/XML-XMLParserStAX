@@ -31,9 +31,9 @@ StAXConfiguration >> domConfiguration [
 StAXConfiguration >> initialize [
 	super initialize.
 
-	usesSeparateCDataEvents := true.
 	skipsCommentEvents := false.
 	skipsPIEvents := false.
+	usesSeparateCDataEvents := true.
 ]
 
 { #category : #accessing }

@@ -8,7 +8,7 @@ Class {
 		'configuration',
 		'eventStream',
 		'nodeStack',
-		'currentNode'
+		'nextNode'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
@@ -20,12 +20,12 @@ StAXDOMBuilder class >> on: aStreamOrCollection [
 
 { #category : #'building - events' }
 StAXDOMBuilder >> buildCDataEvent: anEvent [
-	self nodeStackTopAddNode: (self nodeFactory newCData: anEvent string)
+	self topNodeAdd: (self nodeFactory newCData: anEvent string)
 ]
 
 { #category : #'building - events' }
 StAXDOMBuilder >> buildCommentEvent: anEvent [
-	self nodeStackTopAddNode: (self nodeFactory newComment: anEvent string)
+	self topNodeAdd: (self nodeFactory newComment: anEvent string)
 ]
 
 { #category : #'building - events' }
@@ -75,16 +75,16 @@ StAXDOMBuilder >> buildNextNode [
 	eventStream atEnd
 		ifFalse: [
 			[eventStream atEnd
-				or: [self hasBuiltCurrentNode]]
+				or: [self hasBuiltNextNode]]
 				whileFalse: [self buildNextEvent].
-			result := self currentNode.
-			self currentNode: nil].
+			result := self nextNode.
+			self nextNode: nil].
 	^ result.
 ]
 
 { #category : #'building - events' }
 StAXDOMBuilder >> buildPIEvent: anEvent [
-	self nodeStackTopAddNode:
+	self topNodeAdd:
 		(self nodeFactory newPI
 			target: anEvent target;
 			data: anEvent data)
@@ -97,7 +97,7 @@ StAXDOMBuilder >> buildStartDocumentEvent: anEvent [
 	(document := self nodeFactory newDocument)
 		configuration: self configuration.
 	self
-		currentNode: document;
+		nextNode: document;
 		pushNode: document.
 ]
 
@@ -119,13 +119,13 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 		setNamespaceScope: anEvent namespaceScope.
 
 	self
-		nodeStackTopAddNode: element;
+		topNodeAdd: element;
 		pushNode: element.
 ]
 
 { #category : #'building - events' }
 StAXDOMBuilder >> buildTextEvent: anEvent [
-	self nodeStackTopAddNode: (self nodeFactory newString: anEvent string)
+	self topNodeAdd: (self nodeFactory newString: anEvent string)
 ]
 
 { #category : #accessing }
@@ -143,25 +143,20 @@ StAXDOMBuilder >> configurationClass [
 	^ XMLDOMConfiguration
 ]
 
-{ #category : #accessing }
-StAXDOMBuilder >> currentNode [
-	^ currentNode
-]
-
-{ #category : #private }
-StAXDOMBuilder >> currentNode: aNode [
-	currentNode := aNode
-]
-
 { #category : #testing }
-StAXDOMBuilder >> hasBuiltCurrentNode [
-	^ self currentNode notNil
+StAXDOMBuilder >> hasBuiltNextNode [
+	^ self nextNode notNil
 		and: [self nodeStack isEmpty]
 ]
 
+{ #category : #accessing }
+StAXDOMBuilder >> nextNode [
+	^ nextNode
+]
+
 { #category : #private }
-StAXDOMBuilder >> newNodeList [
-	^ self nodeFactory nodeListClass new
+StAXDOMBuilder >> nextNode: aNode [
+	nextNode := aNode
 ]
 
 { #category : #accessing }
@@ -177,13 +172,6 @@ StAXDOMBuilder >> nodeFactory: aNodeFactory [
 { #category : #private }
 StAXDOMBuilder >> nodeStack [
 	^ nodeStack
-]
-
-{ #category : #private }
-StAXDOMBuilder >> nodeStackTopAddNode: aNode [
-	self nodeStack lastOrNil
-		ifNil: [self currentNode: aNode]
-		ifNotNil: [:topNode | topNode addNode: aNode]
 ]
 
 { #category : #initialization }
@@ -205,4 +193,17 @@ StAXDOMBuilder >> popNode [
 { #category : #private }
 StAXDOMBuilder >> pushNode: aNode [
 	^ self nodeStack addLast: aNode
+]
+
+{ #category : #private }
+StAXDOMBuilder >> topNode [
+	^ self nodeStack lastOrNil
+]
+
+{ #category : #private }
+StAXDOMBuilder >> topNodeAdd: aNode [
+	self topNode
+		ifNil: [self nextNode: aNode]
+		ifNotNil: [:topNode | topNode addNode: aNode].
+	^ aNode.
 ]
