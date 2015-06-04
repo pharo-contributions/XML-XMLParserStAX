@@ -17,8 +17,8 @@ StAXParserTest >> assertIsSampleNamespaceXMLEvents: aCollection [
 		assert: eventStream peek namespaceURI isEmpty;
 		assert: eventStream peek hasAttributes;
 		assert:
-			eventStream next attributes asDictionary =
-				(Dictionary with: 'a' -> '1' with: 'b' -> '2').
+			eventStream next attributes =
+				(OrderPreservingStringDictionary with: 'a' -> '1' with: 'b' -> '2').
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'two');
@@ -82,8 +82,8 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 		assert: eventStream peek namespaceURI isEmpty;
 		assert: eventStream peek hasAttributes;
 		assert:
-			eventStream next attributes asDictionary =
-				(Dictionary with: 'a' -> '1' with: 'b' -> '2').
+			eventStream next attributes =
+				(OrderPreservingStringDictionary with: 'a' -> '1' with: 'b' -> '2').
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'two');
