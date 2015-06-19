@@ -54,7 +54,7 @@ StAXConfiguration >> nodeFactory: aNodeFactory [
 
 { #category : #accessing }
 StAXConfiguration >> requiresDocumentConstraints: aBoolean [
-	super requiresDocumentConstraints: aBoolean..
+	super requiresDocumentConstraints: aBoolean.
 	self updateDOMConfiguration.
 ]
 
@@ -95,7 +95,7 @@ StAXConfiguration >> updateDOMConfiguration [
 
 { #category : #accessing }
 StAXConfiguration >> usesNamespaces: aBoolean [
-	super usesNamespaces: aBoolean..
+	super usesNamespaces: aBoolean.
 	self updateDOMConfiguration.
 ]
 
