@@ -52,6 +52,14 @@ StAXConfiguration >> nodeFactory: aNodeFactory [
 	self domConfiguration nodeFactory: aNodeFactory
 ]
 
+{ #category : #copying }
+StAXConfiguration >> postCopy [
+	super postCopy.
+
+	domConfiguration
+		ifNotNil: [domConfiguration := domConfiguration copy].
+]
+
 { #category : #accessing }
 StAXConfiguration >> requiresDocumentConstraints: aBoolean [
 	super requiresDocumentConstraints: aBoolean.

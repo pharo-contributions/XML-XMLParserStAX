@@ -1,14 +1,16 @@
 "
 This is a pull parser for XMLParser that provides a streaming interface for ""pulling"" XML events and also supports pull-style DOM parsing for dynamically converting events into DOM nodes.
 
-Examples:
-	parser := StAXParser on: xml.
+Example:
+	| parser item |
+	parser := StAXParser on:
+		'<list>
+			<item>one</item>
+			<item>two</item>
+		</list>'.
 
-	""get first <item> element as an XMLElement object""
-	itemElement := parser nextElementNamed: ''item''.
-
-	""get next DOM node of any type""
-	node := parser nextNode.
+	""get the first item as an XMLElement""
+	item := parser nextElementNamed: 'item'.
 
 This is a fork of XMLPullParser and is MIT licensed.
 "
@@ -130,9 +132,19 @@ StAXParser >> endElement: aQualifiedName prefix: aPrefix uri: aURI localName: aL
 			namespaceURI: aURI)
 ]
 
+{ #category : #private }
+StAXParser >> eventQueue [
+	^ eventQueue
+]
+
 { #category : #testing }
 StAXParser >> isStream [
 	^ true
+]
+
+{ #category : #private }
+StAXParser >> lastEventAdded [
+	^ lastEventAdded
 ]
 
 { #category : #private }
@@ -219,9 +231,13 @@ StAXParser >> nodeFactory: aNodeFactory [
 StAXParser >> on: aStringOrStream [
 	super on: aStringOrStream.
 
+	"on: allows reuse so all vars must be set"
 	parser := self parser.
 	current := StAXInitialEvent new.
+	peek := nil.
 	eventQueue := OrderedCollection new: 5.
+	lastEventAdded := nil.
+	domBuilder := nil.
 ]
 
 { #category : #parsing }
