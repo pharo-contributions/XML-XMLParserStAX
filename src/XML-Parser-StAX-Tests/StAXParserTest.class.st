@@ -432,6 +432,24 @@ StAXParserTest >> testNextWhile [
 ]
 
 { #category : #tests }
+StAXParserTest >> testOn [
+	| parser oldConfiguration oldDOMBuilder |
+
+	(parser := StAXParser on: self sampleXML) nextNode.
+	oldConfiguration := parser configuration.
+	oldDOMBuilder := parser domBuilder.
+
+	parser on: self sampleXML.
+	self
+		deny: parser configuration == oldConfiguration;
+		deny: parser domBuilder == oldConfiguration;
+		deny: parser atEnd;
+		assert: parser current isInitialEvent;
+		assert: parser eventQueue isEmpty;
+		assert: parser lastEventAdded isNil.
+]
+
+{ #category : #tests }
 StAXParserTest >> testParseDocument [
 	self assertIsSampleXMLEvents: (StAXParser on: self sampleXML) parseDocument
 ]
