@@ -23,9 +23,7 @@ StAXParserTest >> assertIsSampleNamespaceXMLEvents: aCollection [
 	self
 		assert: (eventStream peek isStartTagNamed: 'two');
 		assert: eventStream peek namespaceURI = 'defaultNS';
-		deny: eventStream next hasAttributes;
-		assert: eventStream peek isComment;
-		assert: eventStream next string = 'comment'.
+		deny: eventStream next hasAttributes.
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'three');
@@ -51,7 +49,7 @@ StAXParserTest >> assertIsSampleNamespaceXMLEvents: aCollection [
 		assert: eventStream peek namespaceURI isEmpty;
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isText: 'before ');
-		assert: eventStream peek isCData;
+		deny: eventStream peek isCData;
 		assert: (eventStream next isText: 'cdata text');
 		assert: (eventStream next isText: ' after');
 		assert: (eventStream next isEndTagNamed: 'five').
@@ -88,9 +86,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 	self
 		assert: (eventStream peek isStartTagNamed: 'two');
 		assert: eventStream peek namespaceURI isEmpty;
-		deny: eventStream next hasAttributes;
-		assert: eventStream peek isComment;
-		assert: eventStream next string = 'comment'.
+		deny: eventStream next hasAttributes.
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'three');
@@ -114,7 +110,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 		assert: eventStream peek namespaceURI isEmpty;
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isText: 'before ');
-		assert: eventStream peek isCData;
+		deny: eventStream peek isCData;
 		assert: (eventStream next isText: 'cdata text');
 		assert: (eventStream next isText: ' after');
 		assert: (eventStream next isEndTagNamed: 'five').
@@ -337,9 +333,8 @@ StAXParserTest >> testNextNode [
 	element := parser nextNode.
 	self
 		assert: (element isElementNamed: 'two');
-		assert: element nodes size = 2;
-		assert: element nodes first isComment;
-		assert: (element nodes second isElementNamed: 'three').
+		assert: element nodes size = 1;
+		assert: (element nodes first isElementNamed: 'three').
 	self
 		assert: (parser next isStartTagNamed: 'four');
 		assert: (parser nextNode isStringNode: 'text').
@@ -396,7 +391,7 @@ StAXParserTest >> testNextUntil [
 	parser := StAXParser on: self sampleXML.
 	events := parser nextUntil: [parser current isStartTagNamed: 'six'].
 	self
-		assert: events size = 17;
+		assert: events size = 16;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
@@ -421,7 +416,7 @@ StAXParserTest >> testNextWhile [
 	parser := StAXParser on: self sampleXML.
 	events := parser nextWhile: [(parser current isStartTagNamed: 'six') not].
 	self
-		assert: events size = 17;
+		assert: events size = 16;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
@@ -469,7 +464,7 @@ StAXParserTest >> testParseDocumentUntil [
 	parser := StAXParser on: self sampleXML.
 	events := parser parseDocumentUntil: [parser current isStartTagNamed: 'six'].
 	self
-		assert: events size = 17;
+		assert: events size = 16;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
@@ -494,7 +489,7 @@ StAXParserTest >> testParseDocumentWhile [
 	parser := StAXParser on: self sampleXML.
 	events := parser parseDocumentWhile: [(parser current isStartTagNamed: 'six') not].
 	self
-		assert: events size = 17;
+		assert: events size = 16;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
@@ -618,9 +613,8 @@ StAXParserTest >> testSkipsCommentEvents [
 		<test>
 			<!--comment-->
 		</test>'.
-	parser := StAXParser on: xml.
-	parser next: 2.
-	self assert: parser next isComment.
+	(parser := StAXParser on: xml) next: 2.
+	self deny: parser next isComment.
 
 	(parser := StAXParser on: xml)
 		skipsCommentEvents: false;
@@ -672,13 +666,15 @@ StAXParserTest >> testUsesSeparateCDataEvents [
 	parser := StAXParser on: xml.
 	parser next: 2.
 	self
-		assert: parser peek isCData;
+		assert: parser peek isText;
+		deny: parser peek isCData;
 		assert: (parser next isText: 'cdata text').
 
 	(parser := StAXParser on: xml)
 		usesSeparateCDataEvents: true;
 		next: 2.
 	self
+		assert: parser peek isText;
 		assert: parser peek isCData;
 		assert: (parser next isText: 'cdata text').
 
@@ -686,17 +682,32 @@ StAXParserTest >> testUsesSeparateCDataEvents [
 		usesSeparateCDataEvents: false;
 		next: 2.
 	self
+		assert: parser peek isText;
 		deny: parser peek isCData;
 		assert: (parser next isText: 'cdata text').
 ]
 
 { #category : #tests }
 StAXParserTest >> testWriteEvents [
+	| events document |
+
+	events := StAXParser parse: self sampleXML.
+	document := XMLDOMParser parse: self sampleXML.
 	self assert:
-		(XMLWriter writeWith: [:writer |
-			writer writeEvents: (StAXParser on: self sampleXML) upToEnd]) =
-				((XMLDOMParser on: self sampleXML)
-					preservesCommentNodes: true;
-					preservesCDataNodes: true;
-					parseDocument) root printString
+		(XMLWriter writeWith: [:writer | writer writeEvents: events]) =
+			document root printString.
+
+	events := 
+		(StAXParser on: self sampleXML)
+			skipsCommentEvents: false;
+			usesSeparateCDataEvents: true;
+			upToEnd.
+	document :=
+		(XMLDOMParser on: self sampleXML)
+			preservesCommentNodes: true;
+			preservesCDataNodes: true;
+			parseDocument.
+	self assert:
+		(XMLWriter writeWith: [:writer | writer writeEvents: events]) =
+			document root printString.
 ]
