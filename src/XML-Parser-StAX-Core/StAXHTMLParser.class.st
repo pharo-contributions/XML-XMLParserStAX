@@ -1,5 +1,5 @@
 "
-A StAX parser for messy HTML. Requires XMLParserHTML.
+A StAX parser for messy HTML. Requires the optional XMLParserHTML package.
 "
 Class {
 	#name : #StAXHTMLParser,
