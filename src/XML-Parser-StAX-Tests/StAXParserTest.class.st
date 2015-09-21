@@ -695,7 +695,7 @@ StAXParserTest >> testWriteEvents [
 	document := XMLDOMParser parse: self sampleXML.
 	self assert:
 		(XMLWriter writeWith: [:writer | writer writeEvents: events]) =
-			document root printString.
+			document root printedWithoutSelfClosingTags.
 
 	events := 
 		(StAXParser on: self sampleXML)
@@ -709,5 +709,5 @@ StAXParserTest >> testWriteEvents [
 			parseDocument.
 	self assert:
 		(XMLWriter writeWith: [:writer | writer writeEvents: events]) =
-			document root printString.
+			document root printedWithoutSelfClosingTags.
 ]
