@@ -98,12 +98,10 @@ StAXStartTagEvent >> setNamespaceScope: aNamespaceScope [
 StAXStartTagEvent >> writeXMLOn: aWriter [
 	| tagWriter |
 
-	tagWriter := aWriter tag: name.
+	tagWriter := aWriter startTag: name.
 	self hasNamespaces
 		ifTrue: [tagWriter setXMLNSDeclarations: self namespaceScope prefixMappings].
 	self hasAttributes
 		ifTrue: [tagWriter setAttributes: self attributes].
-
-	tagWriter startWriting.
-		
+	tagWriter write.
 ]

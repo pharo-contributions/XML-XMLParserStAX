@@ -36,9 +36,7 @@ StAXEndTagEvent >> setName: aName localName: aLocalName namespaceURI: aURI [
 
 { #category : #printing }
 StAXEndTagEvent >> writeXMLOn: aWriter [
-	| tagWriter |
-
-	((tagWriter := aWriter activeTagWriter) notNil
-		and: [tagWriter name = self name])
-		ifTrue: [tagWriter finishWriting]
+	aWriter endTag
+		name: self name;
+		write
 ]
