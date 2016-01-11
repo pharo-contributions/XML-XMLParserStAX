@@ -162,7 +162,7 @@ ConfigurationOfXMLParserStAX >> baseline100: spec [
 
 	spec for: #'common' do: [
 		spec blessing: #'baseline'.
-		"migrated to separate XMLParserStAX repo from XMLParser"
+		"migrated to PharoExtras/XMLParserStAX from PharoExtras/XMLParser"
 		spec repository: 'http://www.smalltalkhub.com/mc/PharoExtras/XMLParserStAX/main'.
 		spec project: 'XMLParser' with: [ 
 			spec
