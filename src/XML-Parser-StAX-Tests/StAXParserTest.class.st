@@ -130,8 +130,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 
 { #category : #accessing }
 StAXParserTest >> sampleNamespaceXML [
-	^ '
-	<?xml version="1.0" encoding="UTF-8"?>
+	^ '<?xml version="1.0" encoding="UTF-8"?>
 	<one a="1" b="2">
 		<two xmlns="defaultNS" xmlns:prefix="prefixNS">
 			<!--comment-->
@@ -146,8 +145,7 @@ StAXParserTest >> sampleNamespaceXML [
 
 { #category : #accessing }
 StAXParserTest >> sampleXML [
-	^ '
-	<?xml version="1.0" encoding="UTF-8"?>
+	^ '<?xml version="1.0" encoding="UTF-8"?>
 	<one a="1" b="2">
 		<two>
 			<!--comment-->
