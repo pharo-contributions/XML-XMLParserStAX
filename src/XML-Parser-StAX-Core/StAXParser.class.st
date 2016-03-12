@@ -63,12 +63,12 @@ StAXParser >> collect: aBlock [
 ]
 
 { #category : #'handling - lexical' }
-StAXParser >> comment: aCommentString [
+StAXParser >> comment: aString [
 	(self isInContent
 		and: [self skipsCommentEvents not])
 		ifTrue: [
 			self addEvent:
-				(StAXCommentEvent string: aCommentString)]
+				(StAXCommentEvent string: aString)]
 ]
 
 { #category : #private }
