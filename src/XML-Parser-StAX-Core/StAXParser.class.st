@@ -175,16 +175,35 @@ StAXParser >> next: anInteger [
 
 { #category : #'accessing - nodes' }
 StAXParser >> nextElement [
+	"Builds and returns a new XMLElement from the next element event(s), skipping
+	events if needed to find the element start. Returns nil if there is no next
+	element.
+
+	Use #peek and #isStartTag before to prevent event skipping."
+
 	^ self domBuilder buildNextElement
 ]
 
 { #category : #'accessing - nodes' }
 StAXParser >> nextElementNamed: aName [
+	"Builds and returns a new XMLElement from the event(s) of the next element
+	with the specified name, skipping events if needed to find the element start.
+	Returns nil if there is no next element.
+
+	Use #peek and #isStartTagNamed: before to prevent event skipping."
+
 	^ self domBuilder buildNextElementNamed: aName
 ]
 
 { #category : #'accessing - nodes' }
 StAXParser >> nextElementNamed: aName namespaceURI: aURI [
+	"Builds and returns a new XMLElement from the event(s) of the next element
+	with the specified name and namespace URI, skipping events if needed to
+	find the element start. Returns nil if there is no next element.
+	
+	Use #peek, #isStartTagNamed:, and #namespaceURI before to prevent event
+	skipping."
+
 	^ self domBuilder
 		buildNextElementNamed: aName
 		namespaceURI: aURI
@@ -192,6 +211,10 @@ StAXParser >> nextElementNamed: aName namespaceURI: aURI [
 
 { #category : #'accessing - nodes' }
 StAXParser >> nextNode [
+	"Returns the next events as some kind of DOM subtree of XMLNodes. The node
+	returned is the root of the tree. Returns nil if there aren't enough
+	events to construct a node."
+
 	^ self domBuilder buildNextNode
 ]
 

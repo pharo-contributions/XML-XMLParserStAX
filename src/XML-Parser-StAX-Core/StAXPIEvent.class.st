@@ -29,8 +29,8 @@ StAXPIEvent >> data [
 ]
 
 { #category : #accessing }
-StAXPIEvent >> data: aData [
-	data := aData
+StAXPIEvent >> data: aString [
+	data := aString
 ]
 
 { #category : #testing }
