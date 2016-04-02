@@ -108,7 +108,7 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 	element :=
 		(self nodeFactory
 			classForElement: anEvent name
-			prefix: (anEvent name prefixBeforeLocalName: anEvent localName)
+			prefix: (anEvent name xmlPrefixBeforeLocalName: anEvent localName)
 			uri: anEvent namespaceURI
 			localName: anEvent localName) new.
 	element
@@ -197,7 +197,7 @@ StAXDOMBuilder >> pushNode: aNode [
 
 { #category : #private }
 StAXDOMBuilder >> topNode [
-	^ self nodeStack lastOrNil
+	^ self nodeStack xmlLastOrNil
 ]
 
 { #category : #private }

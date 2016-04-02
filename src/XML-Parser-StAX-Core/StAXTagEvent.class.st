@@ -28,7 +28,7 @@ StAXTagEvent class >> named: aName [
 StAXTagEvent >> isNamed: aTagName [
 	"tests if tag has same qualified or local name as argument"
 	^ aTagName
-		isQualifiedName: self name
+		isXMLQualifiedName: self name
 		orLocalName: self localName
 ]
 
@@ -36,7 +36,7 @@ StAXTagEvent >> isNamed: aTagName [
 StAXTagEvent >> isNamedAny: aTagNameCollection [
 	"tests if tag qualified or local name is in collection"
 	^ aTagNameCollection
-		includesQualifiedName: self name
+		includesXMLQualifiedName: self name
 		orLocalName: self localName
 ]
 
@@ -47,7 +47,7 @@ StAXTagEvent >> isTag [
 
 { #category : #accessing }
 StAXTagEvent >> localName [
-	^ localName ifNil: [localName := self name localNameAfterPrefix]
+	^ localName ifNil: [localName := self name xmlLocalNameAfterPrefix]
 ]
 
 { #category : #accessing }
@@ -58,7 +58,7 @@ StAXTagEvent >> name [
 { #category : #accessing }
 StAXTagEvent >> name: aName [
 	name := aName.
-	localName := aName localNameAfterPrefix.
+	localName := aName xmlLocalNameAfterPrefix.
 ]
 
 { #category : #accessing }
@@ -68,7 +68,7 @@ StAXTagEvent >> namespaceURI [
 
 { #category : #accessing }
 StAXTagEvent >> prefix [
-	^ self name prefixBeforeLocalName
+	^ self name xmlPrefixBeforeLocalName
 ]
 
 { #category : #printing }
