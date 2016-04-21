@@ -27,6 +27,36 @@ StAXConfigurationTest >> testDOMConfiguration [
 ]
 
 { #category : #tests }
+StAXConfigurationTest >> testDecodesCharacters [
+	| configuration |
+
+	(configuration := self newConfiguration) decodesCharacters: false.
+	self
+		deny: configuration decodesCharacters;
+		deny: configuration domConfiguration decodesCharacters.
+
+	configuration decodesCharacters: true.
+	self
+		assert: configuration decodesCharacters;
+		assert: configuration domConfiguration decodesCharacters.
+]
+
+{ #category : #tests }
+StAXConfigurationTest >> testEntityConfiguration [
+	| entityConfiguration configuration |
+
+	configuration := self newConfiguration.
+	2 timesRepeat: [
+		entityConfiguration :=DTDEntityConfiguration new.
+		configuration entityConfiguration: entityConfiguration.
+		self
+			assert: configuration entityConfiguration == entityConfiguration;
+			assert:
+				configuration domConfiguration entityConfiguration ==
+					entityConfiguration].
+]
+
+{ #category : #tests }
 StAXConfigurationTest >> testIsValidating [
 	| configuration |
 
@@ -45,11 +75,26 @@ StAXConfigurationTest >> testIsValidating [
 StAXConfigurationTest >> testNodeFactory [
 	| nodeFactory configuration |
 
-	nodeFactory := XMLNodeFactory new.
-	(configuration := self newConfiguration) nodeFactory: nodeFactory.
-	self
-		assert: configuration nodeFactory == nodeFactory;
-		assert: configuration domConfiguration nodeFactory == nodeFactory.
+	configuration := self newConfiguration.
+	2 timesRepeat: [
+		nodeFactory := XMLNodeFactory new.
+		configuration nodeFactory: nodeFactory.
+		self
+			assert: configuration nodeFactory == nodeFactory;
+			assert: configuration domConfiguration nodeFactory == nodeFactory].
+]
+
+{ #category : #tests }
+StAXConfigurationTest >> testParserLimits [
+	| parserLimits configuration |
+
+	configuration := self newConfiguration.
+	2 timesRepeat: [
+		parserLimits :=XMLParserLimits new.
+		configuration parserLimits: parserLimits.
+		self
+			assert: configuration parserLimits == parserLimits;
+			assert: configuration domConfiguration parserLimits == parserLimits].
 ]
 
 { #category : #tests }

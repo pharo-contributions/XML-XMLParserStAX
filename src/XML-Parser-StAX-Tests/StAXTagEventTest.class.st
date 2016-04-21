@@ -36,8 +36,8 @@ StAXTagEventTest >> testIsNamedAny [
 
 	tag := self newEvent.
 	self
-		deny: (tag isNamedAny: #('two' 'one'));
-		deny: (tag isNamedAny: #('two' 'one:two')).
+		deny: (tag isNamedAny: #('two' 'one') asSet);
+		deny: (tag isNamedAny: #('two' 'one:two') asSet).
 
 	tag name: 'one'.
 	self
