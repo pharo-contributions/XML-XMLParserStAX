@@ -26,18 +26,17 @@ StAXTagEvent class >> named: aName [
 
 { #category : #testing }
 StAXTagEvent >> isNamed: aTagName [
-	"tests if tag has same qualified or local name as argument"
-	^ aTagName
-		isXMLQualifiedName: self name
-		orLocalName: self localName
+	"Does the receiver's qualified or local name match the argument?"
+
+	^ self name isXMLQualifiedOrLocalName: aTagName
 ]
 
 { #category : #testing }
 StAXTagEvent >> isNamedAny: aTagNameCollection [
-	"tests if tag qualified or local name is in collection"
-	^ aTagNameCollection
-		includesXMLQualifiedName: self name
-		orLocalName: self localName
+	"Does the receiver's qualified or local tag name match any of the names
+	in aNameCollection?"
+
+	^ aTagNameCollection includesXMLName: self name
 ]
 
 { #category : #testing }

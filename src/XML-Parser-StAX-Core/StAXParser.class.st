@@ -32,9 +32,9 @@ Class {
 StAXParser >> addEvent: anEvent [
 	peek
 		ifNil: [
-			eventQueue isEmpty
-				ifTrue: [peek := anEvent]
-				ifFalse: [peek := eventQueue removeFirst]]
+			eventQueue size > 0
+				ifTrue: [peek := eventQueue removeFirst]
+				ifFalse: [peek := anEvent]]
 		ifNotNil: [eventQueue addLast: anEvent].
 	lastEventAdded := anEvent.
 ]
@@ -154,6 +154,8 @@ StAXParser >> newEventList [
 
 { #category : #accessing }
 StAXParser >> next [
+	"returns the next event in the stream or an end document event if there
+	aren't any"
 	current := self peek.
 	peek := nil.
 	^ current.
@@ -216,6 +218,32 @@ StAXParser >> nextNode [
 	events to construct a node."
 
 	^ self domBuilder buildNextNode
+]
+
+{ #category : #'accessing - tags' }
+StAXParser >> nextStartTag [
+	[self atEnd
+		or: [self peek isStartTag]]
+		whileFalse: [self next].
+	^ self next.
+]
+
+{ #category : #'accessing - tags' }
+StAXParser >> nextStartTagNamed: aName [
+	[self atEnd
+		or: [self peek isStartTagNamed: aName]]
+		whileFalse: [self next].
+	^ self next.
+]
+
+{ #category : #'accessing - tags' }
+StAXParser >> nextStartTagNamed: aName namespaceURI: aURI [
+	[self atEnd
+		or: [
+			(self peek isStartTagNamed: aName)
+				and: [self peek namespaceURI = aURI]]]
+		whileFalse: [self next].
+	^ self next.
 ]
 
 { #category : #accessing }
@@ -285,14 +313,13 @@ StAXParser >> parseDocumentWhile: aBlock [
 StAXParser >> peek [
 	peek
 		ifNotNil: [^ peek].
-	eventQueue isEmpty
-		ifTrue: [
-			[parser atEnd]
-				whileFalse: [
-					parser parseToken.
-					peek ifNotNil: [^ peek]].
-			^ peek := StAXEndDocumentEvent new]
-		ifFalse: [^ peek := eventQueue removeFirst].
+	eventQueue size > 0
+		ifTrue: [^ peek := eventQueue removeFirst].
+	[parser atEnd]
+		whileFalse: [
+			parser parseToken.
+			peek ifNotNil: [^ peek]].
+	^ peek := StAXEndDocumentEvent new.
 ]
 
 { #category : #'handling - content' }

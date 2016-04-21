@@ -14,17 +14,31 @@ Class {
 }
 
 { #category : #accessing }
+StAXConfiguration >> decodesCharacters: aBoolean [
+	super decodesCharacters: aBoolean.
+	self updateDOMConfiguration.
+]
+
+{ #category : #accessing }
 StAXConfiguration >> defaultParserHandlerClass [
 	^ StAXParser
 ]
 
 { #category : #accessing }
 StAXConfiguration >> domConfiguration [
+	"the dom configuration is created once and updated to ensure nodes
+	share the same config"
 	^ domConfiguration
 		ifNil: [
 			domConfiguration := XMLDOMConfiguration new.
 			self updateDOMConfiguration.
 			domConfiguration]
+]
+
+{ #category : #accessing }
+StAXConfiguration >> entityConfiguration: anEntityConfiguration [
+	super entityConfiguration: anEntityConfiguration.
+	self updateDOMConfiguration.
 ]
 
 { #category : #initialization }
@@ -50,6 +64,12 @@ StAXConfiguration >> nodeFactory [
 { #category : #accessing }
 StAXConfiguration >> nodeFactory: aNodeFactory [
 	self domConfiguration nodeFactory: aNodeFactory
+]
+
+{ #category : #accessing }
+StAXConfiguration >> parserLimits: aParserLimits [
+	super parserLimits: aParserLimits.
+	self updateDOMConfiguration.
 ]
 
 { #category : #copying }
@@ -95,6 +115,7 @@ StAXConfiguration >> updateDOMConfiguration [
 				isValidating: self isValidating;
 				usesNamespaces: self usesNamespaces;
 				requiresDocumentConstraints: self requiresDocumentConstraints;
+				decodesCharacters: self decodesCharacters;
 				parserLimits: self parserLimits;
 				entityConfiguration: self entityConfiguration;
 				preservesCDataNodes: self usesSeparateCDataEvents;

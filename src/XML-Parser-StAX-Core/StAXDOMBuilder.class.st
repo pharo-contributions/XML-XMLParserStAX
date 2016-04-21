@@ -125,7 +125,9 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 
 { #category : #'building - events' }
 StAXDOMBuilder >> buildTextEvent: anEvent [
-	self topNodeAdd: (self nodeFactory newString: anEvent string)
+	self topNode
+		ifNil: [self nextNode: (self nodeFactory newString: anEvent string)]
+		ifNotNil: [:topNode | topNode addContent: anEvent string]
 ]
 
 { #category : #accessing }

@@ -21,6 +21,11 @@ StAXTextEvent >> buildWith: aBuilder [
 ]
 
 { #category : #testing }
+StAXTextEvent >> isEmpty [
+	^ self string isEmpty
+]
+
+{ #category : #testing }
 StAXTextEvent >> isText [
 	^ true
 ]
@@ -28,6 +33,16 @@ StAXTextEvent >> isText [
 { #category : #testing }
 StAXTextEvent >> isText: aString [
 	^ self string = aString
+]
+
+{ #category : #testing }
+StAXTextEvent >> isWhitespace [
+	^ self string isXMLWhitespace
+]
+
+{ #category : #testing }
+StAXTextEvent >> notEmpty [
+	^ self string notEmpty
 ]
 
 { #category : #printing }
