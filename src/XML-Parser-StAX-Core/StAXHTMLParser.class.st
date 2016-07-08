@@ -9,9 +9,7 @@ Class {
 
 { #category : #accessing }
 StAXHTMLParser class >> htmlParserDriverClassOrNil [
-	^ Smalltalk
-		at: #SAXHTMLParserDriver
-		ifAbsent: [nil]
+	^ XMLClassFinder classNamed: #SAXHTMLParserDriver
 ]
 
 { #category : #testing }
