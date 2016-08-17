@@ -108,9 +108,9 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 	element :=
 		(self nodeFactory
 			classForElement: anEvent name
-			prefix: (anEvent name xmlPrefixBeforeLocalName: anEvent localName)
-			uri: anEvent namespaceURI
-			localName: anEvent localName) new.
+			namespaceURI: anEvent namespaceURI
+			localName: anEvent localName
+			attributes: anEvent attributes) new.
 	element
 		configuration: self configuration;
 		setQualifiedName: anEvent name
@@ -126,8 +126,8 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 { #category : #'building - events' }
 StAXDOMBuilder >> buildTextEvent: anEvent [
 	self topNode
-		ifNil: [self nextNode: (self nodeFactory newString: anEvent string)]
-		ifNotNil: [:topNode | topNode addContent: anEvent string]
+		ifNil: [self nextNode: (self nodeFactory newStringNode: anEvent string)]
+		ifNotNil: [:topNode | topNode addString: anEvent string]
 ]
 
 { #category : #accessing }
