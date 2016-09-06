@@ -30,9 +30,14 @@ StAXConfiguration >> domConfiguration [
 	share the same config"
 	^ domConfiguration
 		ifNil: [
-			domConfiguration := XMLDOMConfiguration new.
+			domConfiguration := self domConfigurationClass new.
 			self updateDOMConfiguration.
 			domConfiguration]
+]
+
+{ #category : #private }
+StAXConfiguration >> domConfigurationClass [
+	^ XMLDOMConfiguration
 ]
 
 { #category : #accessing }
