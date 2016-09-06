@@ -14,7 +14,7 @@ StAXParserTest >> assertIsSampleNamespaceXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'one');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		assert: eventStream peek hasAttributes;
 		assert:
 			eventStream next attributes =
@@ -57,7 +57,7 @@ StAXParserTest >> assertIsSampleNamespaceXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'four');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isText: 'text');
 		assert: (eventStream next isEndTagNamed: 'four').
@@ -68,7 +68,7 @@ StAXParserTest >> assertIsSampleNamespaceXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'five');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isText: 'before ');
 		deny: eventStream peek isCData;
@@ -82,7 +82,7 @@ StAXParserTest >> assertIsSampleNamespaceXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'six');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isEndTagNamed: 'six').
 
@@ -107,7 +107,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'one');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		assert: eventStream peek hasAttributes;
 		assert:
 			eventStream next attributes =
@@ -119,7 +119,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'two');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes.
 
 	2 timesRepeat: [
@@ -129,7 +129,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'three');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes;
 		assert: eventStream peek isPI;
 		assert: eventStream peek target = 'target';
@@ -148,7 +148,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'four');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isText: 'text');
 		assert: (eventStream next isEndTagNamed: 'four').
@@ -159,7 +159,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'five');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isText: 'before ');
 		deny: eventStream peek isCData;
@@ -173,7 +173,7 @@ StAXParserTest >> assertIsSampleXMLEvents: aCollection [
 
 	self
 		assert: (eventStream peek isStartTagNamed: 'six');
-		assert: eventStream peek namespaceURI isEmpty;
+		assert: eventStream peek namespaceURI = '';
 		deny: eventStream next hasAttributes;
 		assert: (eventStream next isEndTagNamed: 'six').
 

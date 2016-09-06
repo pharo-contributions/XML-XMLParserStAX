@@ -22,10 +22,17 @@ StAXTextEventTest >> testIsEmpty [
 
 { #category : #tests }
 StAXTextEventTest >> testIsText [
+	| event |
+
+	event := self newEvent.
 	self
 		assert: self newEvent isText;
-		assert: ((self eventClass string: 'one') isText: 'one');
-		deny: ((self eventClass string: 'one') isText: 'two')
+		deny: (event isText: 'one').
+
+	event string: 'one'.
+	self
+		assert: (event isText: 'one');
+		deny: (event isText: 'two').
 ]
 
 { #category : #testing }
@@ -55,12 +62,16 @@ StAXTextEventTest >> testNotEmpty [
 
 { #category : #tests }
 StAXTextEventTest >> testString [
-	| text |
+	| event |
 
-	text := self eventClass new.
-	self assert: text string isEmpty.
-	text string: 'test'.
-	self assert: text string = 'test'.
+	event := self newEvent.
+	self
+		assert: event string = '';
+		assert: (event string: 'test') == event;
+		assert: event string = 'test'.
 
-	self assert: (self eventClass string: 'test') string = 'test'.
+	event := self eventClass string: 'test'.
+	self
+		assert: event class == self eventClass;
+		assert: event string = 'test'.
 ]

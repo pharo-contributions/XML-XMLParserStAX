@@ -4,9 +4,19 @@ Class {
 	#category : #'XML-Parser-StAX-Tests'
 }
 
+{ #category : #accessing }
+StAXConfigurationTest >> configurationClass [
+	^ StAXConfiguration
+]
+
+{ #category : #accessing }
+StAXConfigurationTest >> domConfigurationClass [
+	^ XMLDOMConfiguration
+]
+
 { #category : #'instance creation' }
 StAXConfigurationTest >> newConfiguration [
-	^ StAXConfiguration new
+	^ self configurationClass new
 ]
 
 { #category : #tests }
@@ -16,7 +26,7 @@ StAXConfigurationTest >> testDOMConfiguration [
 	configuration := self newConfiguration.
 	domConfiguration := configuration domConfiguration.
 	self
-		assert: (domConfiguration isKindOf: XMLDOMConfiguration);
+		assert: domConfiguration class == self domConfigurationClass;
 		assert: domConfiguration isValidating = configuration isValidating;
 		assert: domConfiguration usesNamespaces = configuration usesNamespaces;
 		assert: domConfiguration requiresDocumentConstraints = configuration requiresDocumentConstraints;

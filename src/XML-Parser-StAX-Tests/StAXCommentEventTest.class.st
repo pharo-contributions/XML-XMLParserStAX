@@ -18,10 +18,14 @@ StAXCommentEventTest >> testIsComment [
 StAXCommentEventTest >> testString [
 	| comment |
 
-	comment := self eventClass new.
-	self assert: comment string isEmpty.
-	comment string: 'test'.
-	self assert: comment string = 'test'.
+	comment := self newEvent.
+	self
+		assert: comment string = '';
+		assert: (comment string: 'test') == comment;
+		assert: comment string = 'test'.
 
-	self assert: (self eventClass string: 'test') string = 'test'.
+	comment := self eventClass string: 'test'.
+	self
+		assert: comment class == self eventClass;
+		assert: comment string = 'test'.
 ]

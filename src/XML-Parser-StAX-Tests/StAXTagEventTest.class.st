@@ -61,13 +61,12 @@ StAXTagEventTest >> testLocalName [
 	| tag |
 
 	tag := self newEvent.
-	self assert: tag localName isEmpty.
-
-	tag name: 'one'.
-	self assert: tag localName = 'one'.
-
-	tag name: 'one:two'.
-	self assert: tag localName = 'two'.
+	self
+		assert: tag localName = '';
+		assert: (tag name: 'one') == tag;
+		assert: tag localName = 'one';
+		assert: (tag name: 'one:two') == tag;
+		assert: tag localName = 'two'.
 ]
 
 { #category : #tests }
@@ -75,23 +74,51 @@ StAXTagEventTest >> testName [
 	| tag |
 
 	tag := self newEvent.
-	self assert: tag name isEmpty.
+	self
+		assert: tag name = '';
+		assert: (tag name: 'one') == tag;
+		assert: tag name = 'one';
+		assert: (tag name: 'one:two') == tag;
+		assert: tag name = 'one:two'.
+]
 
-	tag name: 'one'.
-	self assert: tag name = 'one'.
+{ #category : #tests }
+StAXTagEventTest >> testNameNamespaceURI [
+	| tag |
 
-	tag name: 'one:two'.
-	self assert: tag name = 'one:two'.
+	tag :=
+		self eventClass
+			name: 'prefix:test'
+			namespaceURI: 'testNS'.
+	self
+		assert: tag class == self eventClass;
+		assert: tag name = 'prefix:test';
+		assert: tag localName = 'test';
+		assert: tag prefix = 'prefix';
+		assert: tag namespaceURI = 'testNS'.
+]
+
+{ #category : #tests }
+StAXTagEventTest >> testNamed [
+	| tag |
+
+	tag := self eventClass named: 'test'.
+	self
+		assert: tag class == self eventClass;
+		assert: tag name = 'test'.
 ]
 
 { #category : #tests }
 StAXTagEventTest >> testNamespaceURI [
-	self
-		assert: self newEvent namespaceURI isEmpty;
-		assert:
-			(self eventClass
-				name: 'test'
-				namespaceURI: 'testNS') namespaceURI = 'testNS'
+	| tag |
+
+	tag := self newEvent.
+	self assert: self newEvent namespaceURI = ''.
+
+	tag
+		setName: 'test'
+		namespaceURI: 'testNS'.
+	self assert: tag namespaceURI = 'testNS'.
 ]
 
 { #category : #tests }
@@ -99,10 +126,10 @@ StAXTagEventTest >> testPrefix [
 	| tag |
 
 	tag := self newEvent.
-	self assert: tag prefix isEmpty.
+	self assert: tag prefix = ''.
 
 	tag name: 'one'.
-	self assert: tag prefix isEmpty.
+	self assert: tag prefix = ''.
 
 	tag name: 'one:two'.
 	self assert: tag prefix = 'one'.

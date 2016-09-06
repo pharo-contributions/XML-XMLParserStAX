@@ -13,10 +13,11 @@ StAXPIEventTest >> eventClass [
 StAXPIEventTest >> testData [
 	| pi |
 
-	pi := self eventClass new.
-	self assert: pi data isEmpty.
-	pi data: 'test'.
-	self assert: pi data = 'test'.
+	pi := self newEvent.
+	self
+		assert: pi data = '';
+		assert: (pi data: 'test') == pi;
+		assert: pi data = 'test'.
 ]
 
 { #category : #tests }
@@ -28,8 +29,23 @@ StAXPIEventTest >> testIsPI [
 StAXPIEventTest >> testTarget [
 	| pi |
 
-	pi := self eventClass new.
-	self assert: pi target isEmpty.
-	pi target: 'test'.
-	self assert: pi target = 'test'.
+	pi := self newEvent.
+	self
+		assert: pi target = '';
+		assert: (pi target: 'test') == pi;
+		assert: pi target = 'test'.
+]
+
+{ #category : #tests }
+StAXPIEventTest >> testTargetData [
+	| pi |
+
+	pi :=
+		self eventClass
+			target: 'target'
+			data: 'data'.
+	self
+		assert: pi class == self eventClass;
+		assert: pi target = 'target';
+		assert: pi data = 'data'.
 ]
