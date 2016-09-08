@@ -112,15 +112,13 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 			localName: anEvent localName
 			attributes: anEvent attributes) new.
 	element
-		configuration: self configuration;
-		setQualifiedName: anEvent name
+		setConfiguration: self configuration
+		name: anEvent name
 		localName: anEvent localName
-		attributes: anEvent attributes;
-		setNamespaceScope: anEvent namespaceScope.
+		attributes: anEvent attributes.
+	element setNamespaceScope: anEvent namespaceScope.
 
-	self
-		topNodeAdd: element;
-		pushNode: element.
+	self pushElement: element.
 ]
 
 { #category : #'building - events' }
@@ -190,6 +188,12 @@ StAXDOMBuilder >> popNode [
 	self nodeStack isEmpty
 		ifTrue: [^ nil]
 		ifFalse: [^ self nodeStack removeLast]
+]
+
+{ #category : #private }
+StAXDOMBuilder >> pushElement: anElement [
+	self topNodeAdd: anElement.
+	^ self pushNode: anElement.
 ]
 
 { #category : #private }
