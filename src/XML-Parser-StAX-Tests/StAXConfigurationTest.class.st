@@ -1,6 +1,6 @@
 Class {
 	#name : #StAXConfigurationTest,
-	#superclass : #TestCase,
+	#superclass : #XMLConfigurationTest,
 	#category : #'XML-Parser-StAX-Tests'
 }
 
@@ -14,9 +14,9 @@ StAXConfigurationTest >> domConfigurationClass [
 	^ XMLDOMConfiguration
 ]
 
-{ #category : #'instance creation' }
-StAXConfigurationTest >> newConfiguration [
-	^ self configurationClass new
+{ #category : #accessing }
+StAXConfigurationTest >> parserHandlerClass [
+	^ StAXParser
 ]
 
 { #category : #tests }
@@ -40,6 +40,8 @@ StAXConfigurationTest >> testDOMConfiguration [
 StAXConfigurationTest >> testDecodesCharacters [
 	| configuration |
 
+	super testDecodesCharacters.
+
 	(configuration := self newConfiguration) decodesCharacters: false.
 	self
 		deny: configuration decodesCharacters;
@@ -53,22 +55,27 @@ StAXConfigurationTest >> testDecodesCharacters [
 
 { #category : #tests }
 StAXConfigurationTest >> testEntityConfiguration [
-	| entityConfiguration configuration |
+	| configuration newEntityConfiguration |
+
+	super testEntityConfiguration.
 
 	configuration := self newConfiguration.
-	2 timesRepeat: [
-		entityConfiguration :=DTDEntityConfiguration new.
-		configuration entityConfiguration: entityConfiguration.
-		self
-			assert: configuration entityConfiguration == entityConfiguration;
-			assert:
-				configuration domConfiguration entityConfiguration ==
-					entityConfiguration].
+	newEntityConfiguration := DTDEntityConfiguration new.
+	self assert:
+		(configuration entityConfiguration: newEntityConfiguration) ==
+			configuration.
+	self
+		assert: configuration entityConfiguration == newEntityConfiguration;
+		assert:
+			configuration domConfiguration entityConfiguration ==
+				newEntityConfiguration.
 ]
 
 { #category : #tests }
 StAXConfigurationTest >> testIsValidating [
 	| configuration |
+
+	super testIsValidating.
 
 	(configuration := self newConfiguration) isValidating: false.
 	self
@@ -83,33 +90,35 @@ StAXConfigurationTest >> testIsValidating [
 
 { #category : #tests }
 StAXConfigurationTest >> testNodeFactory [
-	| nodeFactory configuration |
+	| configuration newNodeFactory |
 
 	configuration := self newConfiguration.
-	2 timesRepeat: [
-		nodeFactory := XMLNodeFactory new.
-		configuration nodeFactory: nodeFactory.
-		self
-			assert: configuration nodeFactory == nodeFactory;
-			assert: configuration domConfiguration nodeFactory == nodeFactory].
+	newNodeFactory := XMLNodeFactory new.
+	self
+		assert: (configuration nodeFactory: newNodeFactory) == configuration;
+		assert: configuration nodeFactory == newNodeFactory;
+		assert: configuration domConfiguration nodeFactory == newNodeFactory.
 ]
 
 { #category : #tests }
 StAXConfigurationTest >> testParserLimits [
-	| parserLimits configuration |
+	| configuration newParserLimits |
+
+	super testParserLimits.
 
 	configuration := self newConfiguration.
-	2 timesRepeat: [
-		parserLimits :=XMLParserLimits new.
-		configuration parserLimits: parserLimits.
-		self
-			assert: configuration parserLimits == parserLimits;
-			assert: configuration domConfiguration parserLimits == parserLimits].
+	newParserLimits := XMLParserLimits new.
+	self
+		assert: (configuration parserLimits: newParserLimits) == configuration;
+		assert: configuration parserLimits == newParserLimits;
+		assert: configuration domConfiguration parserLimits == newParserLimits.
 ]
 
 { #category : #tests }
 StAXConfigurationTest >> testRequiresDocumentConstraints [
 	| configuration |
+
+	super testRequiresDocumentConstraints.
 
 	(configuration := self newConfiguration) requiresDocumentConstraints: false.
 	self
@@ -126,13 +135,15 @@ StAXConfigurationTest >> testRequiresDocumentConstraints [
 StAXConfigurationTest >> testSkipsCommentEvents [
 	| configuration |
 
-	(configuration := self newConfiguration) skipsCommentEvents: false.
+	configuration := self newConfiguration.
 	self
+		assert: configuration skipsCommentEvents;
+		assert: (configuration skipsCommentEvents: false) == configuration;
 		deny: configuration skipsCommentEvents;
 		assert: configuration domConfiguration preservesCommentNodes.
 
-	configuration skipsCommentEvents: true.
 	self
+		assert: (configuration skipsCommentEvents: true) == configuration;
 		assert: configuration skipsCommentEvents;
 		deny: configuration domConfiguration preservesCommentNodes.
 ]
@@ -140,6 +151,8 @@ StAXConfigurationTest >> testSkipsCommentEvents [
 { #category : #tests }
 StAXConfigurationTest >> testUsesNamespaces [
 	| configuration |
+
+	super testUsesNamespaces.
 
 	(configuration := self newConfiguration) usesNamespaces: false.
 	self
@@ -156,13 +169,14 @@ StAXConfigurationTest >> testUsesNamespaces [
 StAXConfigurationTest >> testUsesSeparateCDataEvents [
 	| configuration |
 
-	(configuration := self newConfiguration) usesSeparateCDataEvents: false.
+	configuration := self newConfiguration.
 	self
+		assert: (configuration usesSeparateCDataEvents: false) == configuration;
 		deny: configuration usesSeparateCDataEvents;
 		deny: configuration domConfiguration preservesCDataNodes.
 
-	configuration usesSeparateCDataEvents: true.
 	self
+		assert: (configuration usesSeparateCDataEvents: true) == configuration;
 		assert: configuration usesSeparateCDataEvents;
 		assert: configuration domConfiguration preservesCDataNodes.
 ]
