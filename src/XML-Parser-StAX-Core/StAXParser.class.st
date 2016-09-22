@@ -32,11 +32,11 @@ Class {
 StAXParser >> addEvent: anEvent [
 	peek
 		ifNil: [
-			eventQueue size > 0
+			eventQueue size > 0 "optimization"
 				ifTrue: [peek := eventQueue removeFirst]
 				ifFalse: [peek := anEvent]]
 		ifNotNil: [eventQueue addLast: anEvent].
-	lastEventAdded := anEvent.
+	^ lastEventAdded := anEvent.
 ]
 
 { #category : #testing }
@@ -78,7 +78,8 @@ StAXParser >> configurationClass [
 
 { #category : #accessing }
 StAXParser >> current [
-	"returns what was last returned by next"
+	"Returns what was last returned by #next"
+
 	^ current
 ]
 
@@ -133,6 +134,11 @@ StAXParser >> endElement: aQualifiedName prefix: aPrefix uri: aURI localName: aL
 ]
 
 { #category : #private }
+StAXParser >> eventListClass [
+	^ StAXEventList
+]
+
+{ #category : #private }
 StAXParser >> eventQueue [
 	^ eventQueue
 ]
@@ -149,13 +155,14 @@ StAXParser >> lastEventAdded [
 
 { #category : #private }
 StAXParser >> newEventList [
-	^ StAXEventList configuration: self configuration
+	^ self eventListClass configuration: self configuration
 ]
 
 { #category : #accessing }
 StAXParser >> next [
-	"returns the next event in the stream or an end document event if there
-	aren't any"
+	"Returns the next event in the event stream or an end-of-document
+	event if there isn't one."
+
 	current := self peek.
 	peek := nil.
 	^ current.
@@ -311,14 +318,18 @@ StAXParser >> parseDocumentWhile: aBlock [
 
 { #category : #accessing }
 StAXParser >> peek [
+	"Peeks the next event in the event stream or returns an
+	end-of-document event if there isn't one."
+
 	peek
 		ifNotNil: [^ peek].
-	eventQueue size > 0
+	eventQueue size > 0 "optimization"
 		ifTrue: [^ peek := eventQueue removeFirst].
 	[parser atEnd]
 		whileFalse: [
 			parser parseToken.
-			peek ifNotNil: [^ peek]].
+			peek
+				ifNotNil: [^ peek]].
 	^ peek := StAXEndDocumentEvent new.
 ]
 
