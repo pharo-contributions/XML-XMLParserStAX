@@ -1,6 +1,6 @@
 Class {
 	#name : #StAXCDataEventTest,
-	#superclass : #StAXTextEventTest,
+	#superclass : #StAXStringEventTest,
 	#category : #'XML-Parser-StAX-Tests'
 }
 

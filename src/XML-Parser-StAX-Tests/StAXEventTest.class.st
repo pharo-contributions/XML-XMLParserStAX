@@ -80,13 +80,13 @@ StAXEventTest >> testIsStartTagNamedAny [
 ]
 
 { #category : #tests }
-StAXEventTest >> testIsTag [
-	self deny: self newEvent isTag
+StAXEventTest >> testIsStringEvent [
+	self
+		deny: self newEvent isStringEvent;
+		deny: (self newEvent isStringEvent: 'test')
 ]
 
 { #category : #tests }
-StAXEventTest >> testIsText [
-	self
-		deny: self newEvent isText;
-		deny: (self newEvent isText: 'test')
+StAXEventTest >> testIsTag [
+	self deny: self newEvent isTag
 ]

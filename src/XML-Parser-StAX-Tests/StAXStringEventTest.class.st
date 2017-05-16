@@ -1,42 +1,59 @@
 Class {
-	#name : #StAXTextEventTest,
+	#name : #StAXStringEventTest,
 	#superclass : #StAXEventTest,
 	#category : #'XML-Parser-StAX-Tests'
 }
 
 { #category : #accessing }
-StAXTextEventTest >> eventClass [
-	^ StAXTextEvent
+StAXStringEventTest >> eventClass [
+	^ StAXStringEvent
 ]
 
 { #category : #tests }
-StAXTextEventTest >> testIsEmpty [
+StAXStringEventTest >> testAsString [
+	| event |
+
+	event := self newEvent.
+	self assert: event asString = ''.
+
+	event string: 'test'.
+	self assert: event asString = 'test'.
+]
+
+{ #category : #tests }
+StAXStringEventTest >> testIsEmpty [
 	| event |
 
 	event := self newEvent.
 	self assert: event isEmpty.
 
-	event := 'test'.
+	event string: 'test'.
 	self deny: event isEmpty.
 ]
 
 { #category : #tests }
-StAXTextEventTest >> testIsText [
+StAXStringEventTest >> testIsStringEvent [
 	| event |
 
 	event := self newEvent.
 	self
-		assert: self newEvent isText;
-		deny: (event isText: 'one').
+		assert: self newEvent isStringEvent;
+		deny: (event isStringEvent: 'one');
+		deny: (event isStringEvent: 'two').
 
 	event string: 'one'.
 	self
-		assert: (event isText: 'one');
-		deny: (event isText: 'two').
+		assert: (event isStringEvent: 'one');
+		deny: (event isStringEvent: 'two').
+
+	event string: 'two'.
+	self
+		deny: (event isStringEvent: 'one');
+		assert: (event isStringEvent: 'two').
 ]
 
 { #category : #testing }
-StAXTextEventTest >> testIsWhitespace [
+StAXStringEventTest >> testIsWhitespace [
 	| event |
 
 	event := self newEvent.
@@ -50,18 +67,18 @@ StAXTextEventTest >> testIsWhitespace [
 ]
 
 { #category : #tests }
-StAXTextEventTest >> testNotEmpty [
+StAXStringEventTest >> testNotEmpty [
 	| event |
 
 	event := self newEvent.
 	self deny: event notEmpty.
 
-	event := 'test'.
+	event string: 'test'.
 	self assert: event notEmpty.
 ]
 
 { #category : #tests }
-StAXTextEventTest >> testString [
+StAXStringEventTest >> testString [
 	| event |
 
 	event := self newEvent.
