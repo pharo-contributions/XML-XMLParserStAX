@@ -32,9 +32,10 @@ Class {
 StAXParser >> addEvent: anEvent [
 	peek
 		ifNil: [
-			eventQueue size > 0 "optimization"
-				ifTrue: [peek := eventQueue removeFirst]
-				ifFalse: [peek := anEvent]]
+			peek :=
+				eventQueue size > 0 "optimization"
+					ifTrue: [eventQueue removeFirst]
+					ifFalse: [anEvent]]
 		ifNotNil: [eventQueue addLast: anEvent].
 	^ lastEventAdded := anEvent.
 ]
@@ -50,7 +51,7 @@ StAXParser >> characters: aString [
 		((self isInCDataSection
 			and: [self usesSeparateCDataEvents])
 			ifTrue: [StAXCDataEvent string: aString]
-			ifFalse: [StAXTextEvent string: aString])
+			ifFalse: [StAXStringEvent string: aString])
 ]
 
 { #category : #enumerating }
@@ -379,6 +380,8 @@ StAXParser >> skipsCommentEvents [
 
 { #category : #configuring }
 StAXParser >> skipsCommentEvents: aBoolean [
+	"Should comment events be skipped?
+	(Default)"
 	self configuration skipsCommentEvents: aBoolean
 ]
 
@@ -389,6 +392,8 @@ StAXParser >> skipsPIEvents [
 
 { #category : #configuring }
 StAXParser >> skipsPIEvents: aBoolean [
+	"Should PI events be skipped?
+	(Not default)"
 	self configuration skipsPIEvents: aBoolean
 ]
 
@@ -419,5 +424,7 @@ StAXParser >> usesSeparateCDataEvents [
 
 { #category : #configuring }
 StAXParser >> usesSeparateCDataEvents: aBoolean [
+	"Should <![CDATA[...]]> sections be preserved as separate events?
+	(Not default)"
 	self configuration usesSeparateCDataEvents: aBoolean
 ]

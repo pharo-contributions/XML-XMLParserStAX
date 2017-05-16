@@ -72,18 +72,28 @@ StAXEvent >> isStartTagNamedAny: aTagName [
 ]
 
 { #category : #testing }
+StAXEvent >> isStringEvent [
+	^ false
+]
+
+{ #category : #testing }
+StAXEvent >> isStringEvent: aStringOrStringEvent [
+	^ false
+]
+
+{ #category : #testing }
 StAXEvent >> isTag [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : #deprecated }
 StAXEvent >> isText [
-	^ false
+	^ self isStringEvent
 ]
 
-{ #category : #testing }
+{ #category : #deprecated }
 StAXEvent >> isText: aString [
-	^ false
+	^ self isStringEvent: aString
 ]
 
 { #category : #printing }

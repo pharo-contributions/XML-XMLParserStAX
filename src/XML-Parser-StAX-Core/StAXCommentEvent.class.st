@@ -31,7 +31,7 @@ StAXCommentEvent >> printOn: aStream [
 	aStream
 		nextPut: $(;
 		print: self string;
-		nextPut: $)
+		nextPut: $).
 ]
 
 { #category : #accessing }

@@ -3,7 +3,7 @@ A start of document event.
 "
 Class {
 	#name : #StAXStartDocumentEvent,
-	#superclass : #StAXEvent,
+	#superclass : #StAXStatelessEvent,
 	#category : #'XML-Parser-StAX-Core'
 }
 

@@ -1,8 +1,8 @@
 "
-A text event.
+A non-markup string event.
 "
 Class {
-	#name : #StAXTextEvent,
+	#name : #StAXStringEvent,
 	#superclass : #StAXEvent,
 	#instVars : [
 		'string'
@@ -11,60 +11,65 @@ Class {
 }
 
 { #category : #'instance creation' }
-StAXTextEvent class >> string: aString [ 
+StAXStringEvent class >> string: aString [ 
 	^self new string: aString
 ]
 
+{ #category : #converting }
+StAXStringEvent >> asString [
+	^ self string
+]
+
 { #category : #building }
-StAXTextEvent >> buildWith: aBuilder [
-	aBuilder buildTextEvent: self
+StAXStringEvent >> buildWith: aBuilder [
+	aBuilder buildStringEvent: self
 ]
 
 { #category : #testing }
-StAXTextEvent >> isEmpty [
+StAXStringEvent >> isEmpty [
 	^ self string isEmpty
 ]
 
 { #category : #testing }
-StAXTextEvent >> isText [
+StAXStringEvent >> isStringEvent [
 	^ true
 ]
 
 { #category : #testing }
-StAXTextEvent >> isText: aString [
-	^ self string = aString
+StAXStringEvent >> isStringEvent: aStringOrStringEvent [
+	^ self string = aStringOrStringEvent asString
 ]
 
 { #category : #testing }
-StAXTextEvent >> isWhitespace [
+StAXStringEvent >> isWhitespace [
 	^ self string isXMLWhitespace
 ]
 
 { #category : #testing }
-StAXTextEvent >> notEmpty [
+StAXStringEvent >> notEmpty [
 	^ self string notEmpty
 ]
 
 { #category : #printing }
-StAXTextEvent >> printOn: aStream [
+StAXStringEvent >> printOn: aStream [
 	super printOn: aStream.
 	aStream
 		nextPut: $(;
 		print: self string;
-		nextPut: $)
+		nextPut: $).
 ]
 
 { #category : #accessing }
-StAXTextEvent >> string [
+StAXStringEvent >> string [
 	^ string ifNil: [string := '']
 ]
 
 { #category : #accessing }
-StAXTextEvent >> string: aString [
+StAXStringEvent >> string: aString [
 	string := aString
 ]
 
 { #category : #printing }
-StAXTextEvent >> writeXMLOn: aWriter [
+StAXStringEvent >> writeXMLOn: aWriter [
 	aWriter string: self string
 ]

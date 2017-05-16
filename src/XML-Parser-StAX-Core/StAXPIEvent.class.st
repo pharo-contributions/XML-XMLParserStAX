@@ -44,7 +44,7 @@ StAXPIEvent >> printOn: aStream [
 	aStream
 		nextPut: $(;
 		print: self target;
-		nextPut: $)
+		nextPut: $).
 ]
 
 { #category : #accessing }

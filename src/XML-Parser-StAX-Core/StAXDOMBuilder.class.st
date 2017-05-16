@@ -122,7 +122,7 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 ]
 
 { #category : #'building - events' }
-StAXDOMBuilder >> buildTextEvent: anEvent [
+StAXDOMBuilder >> buildStringEvent: anEvent [
 	self topNode
 		ifNil: [self nextNode: (self nodeFactory newStringNode: anEvent string)]
 		ifNotNil: [:topNode | topNode addString: anEvent string]

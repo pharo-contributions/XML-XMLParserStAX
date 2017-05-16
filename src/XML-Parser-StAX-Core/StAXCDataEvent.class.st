@@ -1,9 +1,9 @@
 "
-A text event from CDATA
+A non-markup string event from a CDATA section. See #usesSeparateCDataEvents:.
 "
 Class {
 	#name : #StAXCDataEvent,
-	#superclass : #StAXTextEvent,
+	#superclass : #StAXStringEvent,
 	#category : #'XML-Parser-StAX-Core'
 }
 

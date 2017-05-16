@@ -76,7 +76,7 @@ StAXTagEvent >> printOn: aStream [
 	aStream
 		nextPut: $(;
 		print: self name;
-		nextPut: $)
+		nextPut: $).
 ]
 
 { #category : #initialization }
