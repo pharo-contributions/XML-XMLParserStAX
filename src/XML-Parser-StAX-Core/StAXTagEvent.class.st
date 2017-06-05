@@ -13,6 +13,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+StAXTagEvent class >> name: aName [
+	^ self named: aName
+]
+
+{ #category : #'instance creation' }
 StAXTagEvent class >> name: aName namespaceURI: aURI [
 	^ self new
 		setName: aName
