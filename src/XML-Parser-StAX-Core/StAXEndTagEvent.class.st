@@ -28,10 +28,10 @@ StAXEndTagEvent >> isEndTagNamedAny: aTagNameCollection [
 ]
 
 { #category : #initialization }
-StAXEndTagEvent >> setName: aName localName: aLocalName namespaceURI: aURI [
+StAXEndTagEvent >> setName: aName localName: aLocalName namespaceScope: aNamespaceScope [
 	name := aName.
 	localName := aLocalName.
-	namespaceURI := aURI.
+	namespaceScope := aNamespaceScope.
 ]
 
 { #category : #printing }

@@ -47,7 +47,7 @@ StAXEventList >> configuration: aConfiguration [
 	configuration := aConfiguration
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXEventList >> configurationClass [
 	^ StAXConfiguration
 ]
@@ -63,7 +63,7 @@ StAXEventList >> domBuilder [
 		configuration: self configuration domConfiguration
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXEventList >> domBuilderClass [
 	^ StAXDOMBuilder
 ]

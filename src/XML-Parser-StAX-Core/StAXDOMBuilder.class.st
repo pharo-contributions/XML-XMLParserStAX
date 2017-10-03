@@ -103,22 +103,17 @@ StAXDOMBuilder >> buildStartDocumentEvent: anEvent [
 
 { #category : #'building - events' }
 StAXDOMBuilder >> buildStartTagEvent: anEvent [
-	| element |
-
-	element :=
-		(self nodeFactory
+	self pushElement:
+		((self nodeFactory
 			classForElement: anEvent name
 			namespaceURI: anEvent namespaceURI
 			localName: anEvent localName
-			attributes: anEvent attributes) new.
-	element
-		setConfiguration: self configuration
-		name: anEvent name
-		localName: anEvent localName
-		attributes: anEvent attributes.
-	element setNamespaceScope: anEvent namespaceScope.
-
-	self pushElement: element.
+			attributes: anEvent attributes) new
+				setConfiguration: self configuration
+				name: anEvent name
+				localName: anEvent localName
+				attributes: anEvent attributes
+				namespaceScope: anEvent namespaceScope)
 ]
 
 { #category : #'building - events' }
@@ -138,7 +133,7 @@ StAXDOMBuilder >> configuration: aConfiguration [
 	configuration := aConfiguration
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXDOMBuilder >> configurationClass [
 	^ XMLDOMConfiguration
 ]

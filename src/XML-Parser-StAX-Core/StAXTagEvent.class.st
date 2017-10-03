@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'name',
 		'localName',
-		'namespaceURI'
+		'namespaceScope'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
@@ -39,7 +39,7 @@ StAXTagEvent >> isNamed: aTagName [
 { #category : #testing }
 StAXTagEvent >> isNamedAny: aTagNameCollection [
 	"Does the receiver's qualified or local tag name match any of the names
-	in aNameCollection?"
+	in aTagNameCollection?"
 
 	^ aTagNameCollection includesXMLName: self name
 ]
@@ -65,9 +65,14 @@ StAXTagEvent >> name: aName [
 	localName := aName xmlLocalNameAfterPrefix.
 ]
 
+{ #category : #private }
+StAXTagEvent >> namespaceScope [
+	^ namespaceScope ifNil: [XMLNamespaceScope new]
+]
+
 { #category : #accessing }
 StAXTagEvent >> namespaceURI [
-	^ namespaceURI ifNil: [namespaceURI := '']
+	^ self namespaceScope resolvePrefix: self prefix
 ]
 
 { #category : #accessing }
@@ -87,5 +92,7 @@ StAXTagEvent >> printOn: aStream [
 { #category : #initialization }
 StAXTagEvent >> setName: aName namespaceURI: aURI [
 	name := aName.
-	namespaceURI := aURI.
+	(namespaceScope := XMLNamespaceScope new)
+		mapPrefix: aName xmlPrefixBeforeLocalName
+		to: aURI.
 ]

@@ -5,8 +5,7 @@ Class {
 	#name : #StAXStartTagEvent,
 	#superclass : #StAXTagEvent,
 	#instVars : [
-		'attributes',
-		'namespaceScope'
+		'attributes'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
@@ -37,7 +36,13 @@ StAXStartTagEvent >> attributeAt: aName put: aValue [
 
 { #category : #accessing }
 StAXStartTagEvent >> attributes [
-	^ attributes ifNil: [attributes := OrderPreservingStringDictionary new]
+	^ attributes
+		ifNil: [
+			attributes :=
+				namespaceScope
+					ifNil: [XMLAttributeDictionary new]
+					ifNotNil: [XMLNamespacedAttributeDictionary new].
+			attributes setNamespaceScope: namespaceScope]
 ]
 
 { #category : #building }
@@ -76,22 +81,12 @@ StAXStartTagEvent >> isStartTagNamedAny: aTagNameCollection [
 	^ self isNamedAny: aTagNameCollection
 ]
 
-{ #category : #private }
-StAXStartTagEvent >> namespaceScope [
-	^ namespaceScope
-]
-
 { #category : #initialization }
-StAXStartTagEvent >> setName: aName localName: aLocalName namespaceURI: aNamespaceURI attributes: anAttributeDictionary [
+StAXStartTagEvent >> setName: aName localName: aLocalName attributes: anAttributeDictionary namespaceScope: aNamespaceScope [
 	name := aName.
 	localName := aLocalName.
-	namespaceURI := aNamespaceURI.
-	attributes := anAttributeDictionary
-]
-
-{ #category : #initialization }
-StAXStartTagEvent >> setNamespaceScope: aNamespaceScope [
-	namespaceScope := aNamespaceScope
+	attributes := anAttributeDictionary.
+	namespaceScope := aNamespaceScope.
 ]
 
 { #category : #printing }

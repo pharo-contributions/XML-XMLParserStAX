@@ -22,22 +22,20 @@ Class {
 		'current',
 		'peek',
 		'eventQueue',
-		'lastEventAdded',
-		'domBuilder'
+		'domBuilder',
+		'currentScope'
 	],
 	#category : #'XML-Parser-StAX-Core'
 }
 
 { #category : #private }
 StAXParser >> addEvent: anEvent [
-	peek
+	^ peek
 		ifNil: [
-			peek :=
-				eventQueue size > 0 "optimization"
-					ifTrue: [eventQueue removeFirst]
-					ifFalse: [anEvent]]
-		ifNotNil: [eventQueue addLast: anEvent].
-	^ lastEventAdded := anEvent.
+			eventQueue size > 0
+				ifTrue: [eventQueue addLast: anEvent]
+				ifFalse: [peek := anEvent]]
+		ifNotNil: [eventQueue addLast: anEvent]
 ]
 
 { #category : #testing }
@@ -72,7 +70,7 @@ StAXParser >> comment: aString [
 				(StAXCommentEvent string: aString)]
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXParser >> configurationClass [
 	^ StAXConfiguration
 ]
@@ -82,11 +80,6 @@ StAXParser >> current [
 	"Returns what was last returned by #next"
 
 	^ current
-]
-
-{ #category : #private }
-StAXParser >> currentScope: aNamespaceScope [
-	lastEventAdded setNamespaceScope: aNamespaceScope
 ]
 
 { #category : #enumerating }
@@ -115,7 +108,7 @@ StAXParser >> domBuilder [
 				configuration: self configuration domConfiguration]
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXParser >> domBuilderClass [
 	^ StAXDOMBuilder
 ]
@@ -131,10 +124,10 @@ StAXParser >> endElement: aQualifiedName prefix: aPrefix uri: aURI localName: aL
 		(StAXEndTagEvent new
 			setName: aQualifiedName
 			localName: aLocalName
-			namespaceURI: aURI)
+			namespaceScope: currentScope)
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXParser >> eventListClass [
 	^ StAXEventList
 ]
@@ -144,17 +137,19 @@ StAXParser >> eventQueue [
 	^ eventQueue
 ]
 
+{ #category : #initialization }
+StAXParser >> initializeParser: aParser [
+	super initializeParser: aParser.
+
+	parser := aParser.
+]
+
 { #category : #testing }
 StAXParser >> isStream [
 	^ true
 ]
 
-{ #category : #private }
-StAXParser >> lastEventAdded [
-	^ lastEventAdded
-]
-
-{ #category : #private }
+{ #category : #'instance creation' }
 StAXParser >> newEventList [
 	^ self eventListClass configuration: self configuration
 ]
@@ -217,6 +212,32 @@ StAXParser >> nextElementNamed: aName namespaceURI: aURI [
 	^ self domBuilder
 		buildNextElementNamed: aName
 		namespaceURI: aURI
+]
+
+{ #category : #'accessing - tags' }
+StAXParser >> nextEndTag [
+	[self atEnd
+		or: [self peek isEndTag]]
+		whileFalse: [self next].
+	^ self next.
+]
+
+{ #category : #'accessing - tags' }
+StAXParser >> nextEndTagNamed: aName [
+	[self atEnd
+		or: [self peek isEndTagNamed: aName]]
+		whileFalse: [self next].
+	^ self next.
+]
+
+{ #category : #'accessing - tags' }
+StAXParser >> nextEndTagNamed: aName namespaceURI: aURI [
+	[self atEnd
+		or: [
+			(self peek isEndTagNamed: aName)
+				and: [self peek namespaceURI = aURI]]]
+		whileFalse: [self next].
+	^ self next.
 ]
 
 { #category : #'accessing - nodes' }
@@ -290,13 +311,13 @@ StAXParser >> nodeFactory: aNodeFactory [
 StAXParser >> on: aStringOrStream [
 	super on: aStringOrStream.
 
-	"on: allows reuse so all vars must be set"
-	parser := self parser.
+	"#on: allows reuse so all vars must be reset"
+	parser := nil.
 	current := StAXInitialEvent new.
 	peek := nil.
 	eventQueue := OrderedCollection new: 5.
-	lastEventAdded := nil.
 	domBuilder := nil.
+	currentScope := nil.
 ]
 
 { #category : #parsing }
@@ -326,6 +347,11 @@ StAXParser >> peek [
 		ifNotNil: [^ peek].
 	eventQueue size > 0 "optimization"
 		ifTrue: [^ peek := eventQueue removeFirst].
+
+	"this is here instead of in #on: to delay parser creation as long
+	as possible for configuration, just before 'parser' is first referenced"
+	hasParser
+		ifFalse: [self parser].
 	[parser atEnd]
 		whileFalse: [
 			parser parseToken.
@@ -403,13 +429,18 @@ StAXParser >> startDocument [
 ]
 
 { #category : #'handling - content' }
-StAXParser >> startElement: aQualifiedName prefix: aPrefix uri: aURI localName: aLocalName attributes: anAttributeCollection [
+StAXParser >> startElement: aQualifiedName prefix: aPrefix uri: aURI localName: aLocalName attributes: anAttributeDictionary [
 	self addEvent:
 		(StAXStartTagEvent new
 			setName: aQualifiedName
 			localName: aLocalName
-			namespaceURI: aURI
-			attributes: anAttributeCollection)
+			attributes: anAttributeDictionary
+			namespaceScope: currentScope)
+]
+
+{ #category : #private }
+StAXParser >> startScope: aNamespaceScope [
+	currentScope := aNamespaceScope
 ]
 
 { #category : #accessing }

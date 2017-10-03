@@ -17,7 +17,7 @@ StAXHTMLParser class >> isSupported [
 	^ self htmlParserDriverClassOrNil notNil
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXHTMLParser >> driverClass [
 	^ self class htmlParserDriverClassOrNil
 		ifNil: [self errorHTMLParsingUnsupported]

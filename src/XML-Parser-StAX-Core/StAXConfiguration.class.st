@@ -19,7 +19,7 @@ StAXConfiguration >> decodesCharacters: aBoolean [
 	self updateDOMConfiguration.
 ]
 
-{ #category : #accessing }
+{ #category : #defaults }
 StAXConfiguration >> defaultParserHandlerClass [
 	^ StAXParser
 ]
@@ -35,7 +35,7 @@ StAXConfiguration >> domConfiguration [
 			domConfiguration]
 ]
 
-{ #category : #private }
+{ #category : #defaults }
 StAXConfiguration >> domConfigurationClass [
 	^ XMLDOMConfiguration
 ]
