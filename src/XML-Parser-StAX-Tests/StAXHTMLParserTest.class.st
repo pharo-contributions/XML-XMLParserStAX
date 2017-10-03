@@ -19,7 +19,7 @@ StAXHTMLParserTest >> assertIsSampleHTMLEvents: aCollection [
 		assert: (eventStream peek isStartTagNamed: 'i');
 		assert:
 			eventStream next attributes =
-				(OrderPreservingStringDictionary with: 'class' -> '&test;').
+				(XMLAttributeDictionary with: 'class' -> '&test;').
 
 	self assert: (eventStream next isStringEvent: '< test & ').
 
