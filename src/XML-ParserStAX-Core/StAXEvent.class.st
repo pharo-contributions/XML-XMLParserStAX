@@ -4,7 +4,7 @@ An abstract class for events.
 Class {
 	#name : #StAXEvent,
 	#superclass : #Object,
-	#category : #'XML-ParserStAX-Core-XML-ParserStAX-Core'
+	#category : #'XML-ParserStAX-Core'
 }
 
 { #category : #building }

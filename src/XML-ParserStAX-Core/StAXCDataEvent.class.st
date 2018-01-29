@@ -4,7 +4,7 @@ A non-markup string event from a CDATA section. See #usesSeparateCDataEvents:.
 Class {
 	#name : #StAXCDataEvent,
 	#superclass : #StAXStringEvent,
-	#category : #'XML-ParserStAX-Core-XML-ParserStAX-Core'
+	#category : #'XML-ParserStAX-Core'
 }
 
 { #category : #building }

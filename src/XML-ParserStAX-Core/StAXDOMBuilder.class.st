@@ -10,7 +10,7 @@ Class {
 		'nodeStack',
 		'nextNode'
 	],
-	#category : #'XML-ParserStAX-Core-XML-ParserStAX-Core'
+	#category : #'XML-ParserStAX-Core'
 }
 
 { #category : #'instance creation' }

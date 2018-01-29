@@ -4,7 +4,7 @@ A StAX parser for messy HTML. Requires the optional XMLParserHTML package.
 Class {
 	#name : #StAXHTMLParser,
 	#superclass : #StAXParser,
-	#category : #'XML-ParserStAX-Core-XML-ParserStAX-Core'
+	#category : #'XML-ParserStAX-Core'
 }
 
 { #category : #accessing }

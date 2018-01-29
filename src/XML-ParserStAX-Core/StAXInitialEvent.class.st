@@ -4,7 +4,7 @@ Initial (null) event returned by current before parsing has started.
 Class {
 	#name : #StAXInitialEvent,
 	#superclass : #StAXStatelessEvent,
-	#category : #'XML-ParserStAX-Core-XML-ParserStAX-Core'
+	#category : #'XML-ParserStAX-Core'
 }
 
 { #category : #testing }

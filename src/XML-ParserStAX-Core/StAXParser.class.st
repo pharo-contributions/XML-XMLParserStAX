@@ -25,7 +25,7 @@ Class {
 		'domBuilder',
 		'currentScope'
 	],
-	#category : #'XML-ParserStAX-Core-XML-ParserStAX-Core'
+	#category : #'XML-ParserStAX-Core'
 }
 
 { #category : #private }

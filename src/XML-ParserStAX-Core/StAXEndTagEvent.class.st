@@ -4,7 +4,7 @@ An end tag event.
 Class {
 	#name : #StAXEndTagEvent,
 	#superclass : #StAXTagEvent,
-	#category : #'XML-ParserStAX-Core-XML-ParserStAX-Core'
+	#category : #'XML-ParserStAX-Core'
 }
 
 { #category : #building }
