@@ -29,7 +29,7 @@ StAXConfigurationTest >> testDOMConfiguration [
 		assert: domConfiguration class == self domConfigurationClass;
 		assert: domConfiguration isValidating = configuration isValidating;
 		assert: domConfiguration usesNamespaces = configuration usesNamespaces;
-		assert: domConfiguration requiresDocumentConstraints = configuration requiresDocumentConstraints;
+		assert: domConfiguration requiresSchema = configuration requiresSchema;
 		assert: domConfiguration parserLimits == configuration parserLimits;
 		assert: domConfiguration entityConfiguration == configuration entityConfiguration;
 		assert: domConfiguration preservesCDataNodes = configuration usesSeparateCDataEvents;
@@ -115,20 +115,20 @@ StAXConfigurationTest >> testParserLimits [
 ]
 
 { #category : #tests }
-StAXConfigurationTest >> testRequiresDocumentConstraints [
+StAXConfigurationTest >> testRequiresSchema [
 	| configuration |
 
-	super testRequiresDocumentConstraints.
+	super testRequiresSchema.
 
-	(configuration := self newConfiguration) requiresDocumentConstraints: false.
+	(configuration := self newConfiguration) requiresSchema: false.
 	self
-		deny: configuration requiresDocumentConstraints;
-		deny: configuration domConfiguration requiresDocumentConstraints.
+		deny: configuration requiresSchema;
+		deny: configuration domConfiguration requiresSchema.
 
-	configuration requiresDocumentConstraints: true.
+	configuration requiresSchema: true.
 	self
-		assert: configuration requiresDocumentConstraints;
-		assert: configuration domConfiguration requiresDocumentConstraints.
+		assert: configuration requiresSchema;
+		assert: configuration domConfiguration requiresSchema.
 ]
 
 { #category : #tests }
