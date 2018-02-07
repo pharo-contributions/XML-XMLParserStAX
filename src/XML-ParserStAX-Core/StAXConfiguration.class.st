@@ -86,8 +86,8 @@ StAXConfiguration >> postCopy [
 ]
 
 { #category : #accessing }
-StAXConfiguration >> requiresDocumentConstraints: aBoolean [
-	super requiresDocumentConstraints: aBoolean.
+StAXConfiguration >> requiresSchema: aBoolean [
+	super requiresSchema: aBoolean.
 	self updateDOMConfiguration.
 ]
 
@@ -119,7 +119,7 @@ StAXConfiguration >> updateDOMConfiguration [
 			domConfiguration
 				isValidating: self isValidating;
 				usesNamespaces: self usesNamespaces;
-				requiresDocumentConstraints: self requiresDocumentConstraints;
+				requiresSchema: self requiresSchema;
 				decodesCharacters: self decodesCharacters;
 				parserLimits: self parserLimits;
 				entityConfiguration: self entityConfiguration;
