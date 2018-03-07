@@ -118,9 +118,7 @@ StAXDOMBuilder >> buildStartTagEvent: anEvent [
 
 { #category : #'building - events' }
 StAXDOMBuilder >> buildStringEvent: anEvent [
-	self topNode
-		ifNil: [self nextNode: (self nodeFactory newStringNode: anEvent string)]
-		ifNotNil: [:topNode | topNode addString: anEvent string]
+	self topNodeAddString: anEvent string
 ]
 
 { #category : #accessing }
@@ -180,9 +178,9 @@ StAXDOMBuilder >> on: aStreamOrCollection [
 
 { #category : #private }
 StAXDOMBuilder >> popNode [
-	self nodeStack isEmpty
-		ifTrue: [^ nil]
-		ifFalse: [^ self nodeStack removeLast]
+	self nodeStack size > 0
+		ifTrue: [^ self nodeStack removeLast]
+		ifFalse: [^ nil]
 ]
 
 { #category : #private }
@@ -196,7 +194,7 @@ StAXDOMBuilder >> pushNode: aNode [
 	^ self nodeStack addLast: aNode
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 StAXDOMBuilder >> topNode [
 	^ self nodeStack xmlLastOrNil
 ]
@@ -204,7 +202,20 @@ StAXDOMBuilder >> topNode [
 { #category : #private }
 StAXDOMBuilder >> topNodeAdd: aNode [
 	self topNode
-		ifNil: [self nextNode: aNode]
-		ifNotNil: [:topNode | topNode addNode: aNode].
-	^ aNode.
+		ifNil: [
+			self nextNode: aNode.
+			^ aNode]
+		ifNotNil: [:topNode |
+			^ topNode addNode: aNode]
+]
+
+{ #category : #private }
+StAXDOMBuilder >> topNodeAddString: aString [
+	self topNode
+		ifNil: [| stringNode |
+			stringNode := self nodeFactory newStringNode: aString.
+			self nextNode: stringNode.
+			^ stringNode]
+		ifNotNil: [:topNode |
+			^ topNode addString: aString]
 ]
