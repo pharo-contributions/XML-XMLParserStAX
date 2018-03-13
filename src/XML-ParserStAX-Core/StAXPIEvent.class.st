@@ -41,9 +41,10 @@ StAXPIEvent >> isPI [
 { #category : #printing }
 StAXPIEvent >> printOn: aStream [
 	super printOn: aStream.
+
 	aStream
 		nextPut: $(;
-		print: self target;
+		nextPutAll: self target;
 		nextPut: $).
 ]
 

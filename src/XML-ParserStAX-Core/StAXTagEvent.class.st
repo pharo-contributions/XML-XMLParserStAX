@@ -83,9 +83,10 @@ StAXTagEvent >> prefix [
 { #category : #printing }
 StAXTagEvent >> printOn: aStream [
 	super printOn: aStream.
+
 	aStream
 		nextPut: $(;
-		print: self name;
+		nextPutAll: self name;
 		nextPut: $).
 ]
 

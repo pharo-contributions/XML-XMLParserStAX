@@ -28,6 +28,7 @@ StAXCommentEvent >> isComment [
 { #category : #printing }
 StAXCommentEvent >> printOn: aStream [
 	super printOn: aStream.
+
 	aStream
 		nextPut: $(;
 		print: self string;
