@@ -1,7 +1,10 @@
+"
+Unit tests for StAXParser
+"
 Class {
 	#name : #StAXParserTest,
 	#superclass : #TestCase,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Parser'
 }
 
 { #category : #asserting }
@@ -226,15 +229,15 @@ StAXParserTest >> testAsNode [
 	self
 		assert: node isDocument;
 		assert:
-			node allElements elementNames asArray =
+			node allElements elementNames asArray equals:
 				#('one' 'two' 'three' 'four' 'five' 'six').
 
 	node := (StAXParser on: self sampleXML) upToEnd allButFirst asNode.
 	self
 		assert: (node isElementNamed: 'one');
 		assert:
-			node allElements elementNames asArray =
-				#('one' 'two' 'three' 'four' 'five' 'six').
+			node allElements elementNames asArray equals:
+				#('one' 'two' 'three' 'four' 'five' 'six')
 ]
 
 { #category : #tests }
@@ -244,7 +247,7 @@ StAXParserTest >> testAsNodeConfigurationInheritance [
 	parser := StAXParser on: self sampleXML.
 	self assert:
 		parser upToEnd asNode configuration ==
-			parser configuration domConfiguration.
+			parser configuration domConfiguration
 ]
 
 { #category : #tests }
@@ -256,7 +259,7 @@ StAXParserTest >> testCollect [
 	self
 		assert: pairs class == XMLOrderedList;
 		assert: (pairs allSatisfy: [:each | each isKindOf: Association]);
-		assertIsSampleXMLEvents: (pairs collect: [:each | each key]).
+		assertIsSampleXMLEvents: (pairs collect: [:each | each key])
 ]
 
 { #category : #tests }
@@ -272,7 +275,7 @@ StAXParserTest >> testCurrent [
 			events addLast: parser current].
 	self assertIsSampleXMLEvents: events.
 
-	self assert: parser current isEndDocument.
+	self assert: parser current isEndDocument
 ]
 
 { #category : #tests }
@@ -282,7 +285,7 @@ StAXParserTest >> testDetect [
 	parser := StAXParser on: self sampleXML.
 	self
 		assert: ((parser detect: [:each | each isStartTagNamed: 'two']) isStartTagNamed: 'two');
-		assert: (parser detect: [:each | each isStartTagNamed: 'two']) isNil.
+		assert: (parser detect: [:each | each isStartTagNamed: 'two']) isNil
 ]
 
 { #category : #tests }
@@ -297,7 +300,7 @@ StAXParserTest >> testDetectIfNone [
 	self assert:
 		(parser
 			detect: [:each | each isStartTagNamed: 'two']
-			ifNone: [#absent]) = #absent.
+			ifNone: [#absent]) equals: #absent
 ]
 
 { #category : #tests }
@@ -306,13 +309,13 @@ StAXParserTest >> testDo [
 
 	events := OrderedCollection new.
 	(StAXParser on: self sampleXML) do: [:each | events add: each].
-	self assertIsSampleXMLEvents: events.
+	self assertIsSampleXMLEvents: events
 ]
 
 { #category : #tests }
 StAXParserTest >> testNamespaceParsing [
 	self assertIsSampleNamespaceXMLEvents:
-		(StAXParser on: self sampleNamespaceXML) upToEnd.
+		(StAXParser on: self sampleNamespaceXML) upToEnd
 ]
 
 { #category : #tests }
@@ -342,7 +345,7 @@ StAXParserTest >> testNamespaceParsingDisabled [
 			(parser on: invalidXML)
 				usesNamespaces: true;
 				parseDocument]
-		raise: XMLNamespaceException.
+		raise: XMLNamespaceException
 ]
 
 { #category : #tests }
@@ -360,7 +363,7 @@ StAXParserTest >> testNext [
 
 	parser := StAXParser on: self sampleXML.
 	self assertIsSampleXMLEvents: (parser next: events size).
-	self assert: (parser next: events size) isEmpty.
+	self assert: (parser next: events size) isEmpty
 ]
 
 { #category : #tests }
@@ -391,7 +394,7 @@ StAXParserTest >> testNextAfterPeek [
 		assert: (parser peek isEndTagNamed: 'one');
 		assert: (parser next isEndTagNamed: 'one');
 		assert: parser peek isEndDocument;
-		assert: parser next isEndDocument.
+		assert: parser next isEndDocument
 ]
 
 { #category : #tests }
@@ -413,8 +416,8 @@ StAXParserTest >> testNextElement [
 
 	self
 		assert: (elements allSatisfy: [:each | each isElement]);
-		assert: (elements collect: [:each | each name]) asArray = #('two' 'four' 'five' 'six');
-		assert: parser atEnd.
+		assert: (elements collect: [:each | each name]) asArray equals: #('two' 'four' 'five' 'six');
+		assert: parser atEnd
 ]
 
 { #category : #tests }
@@ -428,7 +431,7 @@ StAXParserTest >> testNextElementNamed [
 		assert: ((parser nextElementNamed: 'five') isElementNamed: 'five');
 		assert: parser peek isStringEvent;
 		assert: (parser nextElementNamed: 'five') isNil;
-		assert: parser atEnd.
+		assert: parser atEnd
 ]
 
 { #category : #tests }
@@ -460,7 +463,7 @@ StAXParserTest >> testNextElementNamedNamespaceURI [
 		(parser
 			nextElementNamed: 'four'
 			namespaceURI: 'absentNS') isNil.
-	self assert: parser atEnd.
+	self assert: parser atEnd
 ]
 
 { #category : #tests }
@@ -506,7 +509,7 @@ StAXParserTest >> testNextEndTagNamedNamespaceURI [
 	self assert:
 		(parser
 			nextEndTagNamed: 'two'
-			namespaceURI: 'absentNS') isEndDocument.
+			namespaceURI: 'absentNS') isEndDocument
 ]
 
 { #category : #tests }
@@ -518,7 +521,7 @@ StAXParserTest >> testNextNode [
 	element := parser nextNode.
 	self
 		assert: (element isElementNamed: 'two');
-		assert: element nodes size = 3;
+		assert: element nodes size equals: 3;
 		assert: element nodes first isStringNode;
 		assert: element nodes first isWhitespace;
 		assert: (element nodes second isElementNamed: 'three');
@@ -532,7 +535,7 @@ StAXParserTest >> testNextNode [
 	element := parser nextNode.
 	self
 		assert: (element isElementNamed: 'four');
-		assert: element nodes size = 1;
+		assert: element nodes size equals: 1;
 		assert: (element firstNode isStringNode: 'text').
 	
 	self
@@ -542,7 +545,7 @@ StAXParserTest >> testNextNode [
 	element := parser nextNode.
 	self
 		assert: (element isElementNamed: 'five');
-		assert: element nodes size = 1;
+		assert: element nodes size equals: 1;
 		assert: (element firstNode isStringNode: 'before cdata text after').
 	
 	self
@@ -552,7 +555,7 @@ StAXParserTest >> testNextNode [
 	self assert: (parser next isStartTagNamed: 'six').
 
 	parser upToEnd.
-	self assert: parser nextNode isNil.
+	self assert: parser nextNode isNil
 ]
 
 { #category : #tests }
@@ -562,7 +565,7 @@ StAXParserTest >> testNextNodeConfigurationInheritance [
 	parser := StAXParser on: self sampleXML.
 	self assert:
 		parser nextNode configuration ==
-			parser configuration domConfiguration.
+			parser configuration domConfiguration
 ]
 
 { #category : #tests }
@@ -580,7 +583,7 @@ StAXParserTest >> testNextNodeElements [
 	self
 		assert: (elements allSatisfy: [:each | each isElement]);
 		assert:
-			(elements collect: [:each | each name]) asArray =
+			(elements collect: [:each | each name]) asArray equals:
 				#('two' 'four' 'five' 'six').
 ]
 
@@ -591,7 +594,7 @@ StAXParserTest >> testNextStartTag [
 	parser := StAXParser on: self sampleXML.
 	#('one' 'two' 'three' 'four' 'five' 'six') do: [:each |
 		self assert: (parser nextStartTag isStartTagNamed: each)].
-	self assert: parser nextStartTag isEndDocument.
+	self assert: parser nextStartTag isEndDocument
 ]
 
 { #category : #tests }
@@ -627,7 +630,7 @@ StAXParserTest >> testNextStartTagNamedNamespaceURI [
 	self assert:
 		(parser
 			nextStartTagNamed: 'prefix:three'
-			namespaceURI: 'absentNS') isEndDocument.
+			namespaceURI: 'absentNS') isEndDocument
 ]
 
 { #category : #tests }
@@ -637,7 +640,7 @@ StAXParserTest >> testNextUntil [
 	parser := StAXParser on: self sampleXML.
 	events := parser nextUntil: [parser peek isStartTagNamed: 'two'].
 	self
-		assert: events size = 3;
+		assert: events size equals: 3;
 		assert: events first isStartDocument;
 		assert: (events second isStartTagNamed: 'one');
 		assert: events third isStringEvent;
@@ -647,14 +650,14 @@ StAXParserTest >> testNextUntil [
 	parser := StAXParser on: self sampleXML.
 	events := parser nextUntil: [parser current isStartTagNamed: 'six'].
 	self
-		assert: events size = 23;
+		assert: events size equals: 23;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
 	self assertIsSampleXMLEvents:
 		((StAXParser on: self sampleXML) nextUntil: [false]).
 	self assert:
-		((StAXParser on: self sampleXML) nextUntil: [true]) isEmpty.
+		((StAXParser on: self sampleXML) nextUntil: [true]) isEmpty
 ]
 
 { #category : #tests }
@@ -666,7 +669,7 @@ StAXParserTest >> testNextWhile [
 		parser nextWhile: [
 			(parser peek isStartTagNamed: 'two') not].
 	self
-		assert: events size = 3;
+		assert: events size equals: 3;
 		assert: events first isStartDocument;
 		assert: (events second isStartTagNamed: 'one');
 		assert: events third isStringEvent;
@@ -678,14 +681,14 @@ StAXParserTest >> testNextWhile [
 		parser nextWhile: [
 			(parser current isStartTagNamed: 'six') not].
 	self
-		assert: events size = 23;
+		assert: events size equals: 23;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
 	self assertIsSampleXMLEvents:
 		((StAXParser on: self sampleXML) nextWhile: [true]).
 	self assert:
-		((StAXParser on: self sampleXML) nextWhile: [false]) isEmpty.
+		((StAXParser on: self sampleXML) nextWhile: [false]) isEmpty
 ]
 
 { #category : #tests }
@@ -719,7 +722,7 @@ StAXParserTest >> testParseDocumentUntil [
 		parser parseDocumentUntil: [
 			parser peek isStartTagNamed: 'two'].
 	self
-		assert: events size = 3;
+		assert: events size equals: 3;
 		assert: events first isStartDocument;
 		assert: (events second isStartTagNamed: 'one');
 		assert: events third isStringEvent;
@@ -731,7 +734,7 @@ StAXParserTest >> testParseDocumentUntil [
 		parser parseDocumentUntil: [
 			parser current isStartTagNamed: 'six'].
 	self
-		assert: events size = 23;
+		assert: events size equals: 23;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
@@ -740,7 +743,7 @@ StAXParserTest >> testParseDocumentUntil [
 			parseDocumentUntil: [false]).
 	self assert:
 		((StAXParser on: self sampleXML)
-			parseDocumentUntil: [true]) isEmpty.
+			parseDocumentUntil: [true]) isEmpty
 ]
 
 { #category : #tests }
@@ -752,7 +755,7 @@ StAXParserTest >> testParseDocumentWhile [
 		parser parseDocumentWhile: [
 			(parser peek isStartTagNamed: 'two') not].
 	self
-		assert: events size = 3;
+		assert: events size equals: 3;
 		assert: events first isStartDocument;
 		assert: (events second isStartTagNamed: 'one');
 		assert: events third isStringEvent;
@@ -764,7 +767,7 @@ StAXParserTest >> testParseDocumentWhile [
 		parser parseDocumentWhile: [
 			(parser current isStartTagNamed: 'six') not].
 	self
-		assert: events size = 23;
+		assert: events size equals: 23;
 		assert: (events last isStartTagNamed: 'six');
 		assert: (parser next isEndTagNamed: 'six').
 
@@ -773,7 +776,7 @@ StAXParserTest >> testParseDocumentWhile [
 			parseDocumentWhile: [true]).
 	self assert:
 		((StAXParser on: self sampleXML)
-			parseDocumentWhile: [false]) isEmpty.
+			parseDocumentWhile: [false]) isEmpty
 ]
 
 { #category : #tests }
@@ -789,7 +792,7 @@ StAXParserTest >> testPeek [
 	self assertIsSampleXMLEvents: events.
 
 	"subsequent calls return end document events"
-	self assert: parser peek isEndDocument.
+	self assert: parser peek isEndDocument
 ]
 
 { #category : #tests }
@@ -807,7 +810,7 @@ StAXParserTest >> testPeekRepeating [
 	self assertIsSampleXMLEvents: events.
 
 	"subsequent calls return end document events"
-	self assert: parser peek isEndDocument.
+	self assert: parser peek isEndDocument
 ]
 
 { #category : #tests }
@@ -816,8 +819,8 @@ StAXParserTest >> testSelect [
 
 	parser := StAXParser on: self sampleXML.
 	self assert:
-		((parser select: [:each | each isStartTag]) collect: [:each | each name]) asArray = 
-			#('one' 'two' 'three' 'four' 'five' 'six').
+		((parser select: [:each | each isStartTag]) collect: [:each | each name]) asArray equals: 
+			#('one' 'two' 'three' 'four' 'five' 'six')
 ]
 
 { #category : #tests }
@@ -837,7 +840,7 @@ StAXParserTest >> testSkip [
 	parser skip: 1.
 	self assert: parser atEnd.
 	parser skip: events size.
-	self assert: parser atEnd.
+	self assert: parser atEnd
 ]
 
 { #category : #tests }
@@ -858,7 +861,7 @@ StAXParserTest >> testSkipUntil [
 
 	(parser := StAXParser on: self sampleXML)
 		skipUntil: [true].
-	self assert: parser next isStartDocument.
+	self assert: parser next isStartDocument
 ]
 
 { #category : #tests }
@@ -879,7 +882,7 @@ StAXParserTest >> testSkipWhile [
 
 	(parser := StAXParser on: self sampleXML)
 		skipWhile: [false].
-	self assert: parser next isStartDocument.
+	self assert: parser next isStartDocument
 ]
 
 { #category : #tests }
@@ -898,7 +901,7 @@ StAXParserTest >> testSkipsCommentEvents [
 	(parser := StAXParser on: xml)
 		skipsCommentEvents: true;
 		next: 2.
-	self deny: parser next isComment.
+	self deny: parser next isComment
 ]
 
 { #category : #tests }
@@ -918,7 +921,7 @@ StAXParserTest >> testSkipsPIEvents [
 	(parser := StAXParser on: xml)
 		skipsPIEvents: true;
 		next: 2.
-	self deny: parser next isPI.
+	self deny: parser next isPI
 ]
 
 { #category : #tests }
@@ -952,7 +955,7 @@ StAXParserTest >> testUsesSeparateCDataEvents [
 	self
 		assert: parser peek isStringEvent;
 		deny: parser peek isCData;
-		assert: (parser next isStringEvent: 'cdata text').
+		assert: (parser next isStringEvent: 'cdata text')
 ]
 
 { #category : #tests }
@@ -962,7 +965,7 @@ StAXParserTest >> testWriteEvents [
 	events := StAXParser parse: self sampleXML.
 	document := XMLDOMParser parse: self sampleXML.
 	self assert:
-		(XMLWriter writeWith: [:writer | events writeXMLOn: writer]) =
+		(XMLWriter writeWith: [:writer | events writeXMLOn: writer]) equals:
 			document root printedWithoutSelfClosingTags.
 
 	events := 
@@ -976,6 +979,6 @@ StAXParserTest >> testWriteEvents [
 			preservesCDataNodes: true;
 			parseDocument.
 	self assert:
-		(XMLWriter writeWith: [:writer | events writeXMLOn: writer]) =
-			document root printedWithoutSelfClosingTags.
+		(XMLWriter writeWith: [:writer | events writeXMLOn: writer]) equals:
+			document root printedWithoutSelfClosingTags
 ]

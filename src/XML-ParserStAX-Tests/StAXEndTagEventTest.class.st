@@ -1,7 +1,10 @@
+"
+Unit tests for StAXEndTagEvent
+"
 Class {
 	#name : #StAXEndTagEventTest,
 	#superclass : #StAXTagEventTest,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Events'
 }
 
 { #category : #accessing }
@@ -32,7 +35,7 @@ StAXEndTagEventTest >> testIsEndTagNamed [
 	self
 		assert: (tag isEndTagNamed: 'two');
 		assert: (tag isEndTagNamed: 'one:two');
-		deny: (tag isEndTagNamed: 'one').
+		deny: (tag isEndTagNamed: 'one')
 ]
 
 { #category : #tests }
@@ -53,5 +56,5 @@ StAXEndTagEventTest >> testIsEndTagNamedAny [
 	self
 		assert: (tag isEndTagNamedAny: #('two' 'one'));
 		assert: (tag isEndTagNamedAny: #('two' 'one:two'));
-		deny: (tag isEndTagNamedAny: #('one' 'two:one')).
+		deny: (tag isEndTagNamedAny: #('one' 'two:one'))
 ]

@@ -1,7 +1,10 @@
+"
+Unit tests for StAXTagEvent and subclasses
+"
 Class {
 	#name : #StAXTagEventTest,
 	#superclass : #StAXEventTest,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Events'
 }
 
 { #category : #accessing }
@@ -62,11 +65,11 @@ StAXTagEventTest >> testLocalName [
 
 	tag := self newEvent.
 	self
-		assert: tag localName = '';
+		assert: tag localName equals: '';
 		assert: (tag name: 'one') == tag;
-		assert: tag localName = 'one';
+		assert: tag localName equals: 'one';
 		assert: (tag name: 'one:two') == tag;
-		assert: tag localName = 'two'.
+		assert: tag localName equals: 'two'
 ]
 
 { #category : #tests }
@@ -75,11 +78,11 @@ StAXTagEventTest >> testName [
 
 	tag := self newEvent.
 	self
-		assert: tag name = '';
+		assert: tag name equals: '';
 		assert: (tag name: 'one') == tag;
-		assert: tag name = 'one';
+		assert: tag name equals: 'one';
 		assert: (tag name: 'one:two') == tag;
-		assert: tag name = 'one:two'.
+		assert: tag name equals: 'one:two'
 ]
 
 { #category : #tests }
@@ -92,10 +95,10 @@ StAXTagEventTest >> testNameNamespaceURI [
 			namespaceURI: 'testNS'.
 	self
 		assert: tag class == self eventClass;
-		assert: tag name = 'prefix:test';
-		assert: tag localName = 'test';
-		assert: tag prefix = 'prefix';
-		assert: tag namespaceURI = 'testNS'.
+		assert: tag name equals: 'prefix:test';
+		assert: tag localName equals: 'test';
+		assert: tag prefix equals: 'prefix';
+		assert: tag namespaceURI equals: 'testNS'
 ]
 
 { #category : #tests }
@@ -105,7 +108,7 @@ StAXTagEventTest >> testNamed [
 	tag := self eventClass named: 'test'.
 	self
 		assert: tag class == self eventClass;
-		assert: tag name = 'test'.
+		assert: tag name equals: 'test'
 ]
 
 { #category : #tests }
@@ -113,12 +116,12 @@ StAXTagEventTest >> testNamespaceURI [
 	| tag |
 
 	tag := self newEvent.
-	self assert: self newEvent namespaceURI = ''.
+	self assert: self newEvent namespaceURI equals: ''.
 
 	tag
 		setName: 'test'
 		namespaceURI: 'testNS'.
-	self assert: tag namespaceURI = 'testNS'.
+	self assert: tag namespaceURI equals: 'testNS'
 ]
 
 { #category : #tests }
@@ -126,11 +129,11 @@ StAXTagEventTest >> testPrefix [
 	| tag |
 
 	tag := self newEvent.
-	self assert: tag prefix = ''.
+	self assert: tag prefix equals: ''.
 
 	tag name: 'one'.
-	self assert: tag prefix = ''.
+	self assert: tag prefix equals: ''.
 
 	tag name: 'one:two'.
-	self assert: tag prefix = 'one'.
+	self assert: tag prefix equals: 'one'
 ]

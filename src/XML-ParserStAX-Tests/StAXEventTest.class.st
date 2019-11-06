@@ -1,7 +1,10 @@
+"
+Unit tests for StAXEvent and subclasses
+"
 Class {
 	#name : #StAXEventTest,
 	#superclass : #TestCase,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Events'
 }
 
 { #category : #testing }

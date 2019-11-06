@@ -1,7 +1,10 @@
+"
+Unit tests for StAXConfiguration
+"
 Class {
 	#name : #StAXConfigurationTest,
 	#superclass : #XMLConfigurationTest,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Configuration'
 }
 
 { #category : #accessing }
@@ -27,13 +30,13 @@ StAXConfigurationTest >> testDOMConfiguration [
 	domConfiguration := configuration domConfiguration.
 	self
 		assert: domConfiguration class == self domConfigurationClass;
-		assert: domConfiguration isValidating = configuration isValidating;
-		assert: domConfiguration usesNamespaces = configuration usesNamespaces;
-		assert: domConfiguration requiresSchema = configuration requiresSchema;
+		assert: domConfiguration isValidating equals: configuration isValidating;
+		assert: domConfiguration usesNamespaces equals: configuration usesNamespaces;
+		assert: domConfiguration requiresSchema equals: configuration requiresSchema;
 		assert: domConfiguration parserLimits == configuration parserLimits;
 		assert: domConfiguration entityConfiguration == configuration entityConfiguration;
-		assert: domConfiguration preservesCDataNodes = configuration usesSeparateCDataEvents;
-		assert: domConfiguration preservesCommentNodes = configuration skipsCommentEvents not.
+		assert: domConfiguration preservesCDataNodes equals: configuration usesSeparateCDataEvents;
+		assert: domConfiguration preservesCommentNodes equals: configuration skipsCommentEvents not.
 ]
 
 { #category : #tests }

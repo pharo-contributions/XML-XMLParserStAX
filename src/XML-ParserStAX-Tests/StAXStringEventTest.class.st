@@ -1,7 +1,10 @@
+"
+Unit tests for StAXStringEvent
+"
 Class {
 	#name : #StAXStringEventTest,
 	#superclass : #StAXEventTest,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Events'
 }
 
 { #category : #accessing }
@@ -14,10 +17,10 @@ StAXStringEventTest >> testAsString [
 	| event |
 
 	event := self newEvent.
-	self assert: event asString = ''.
+	self assert: event asString equals: ''.
 
 	event string: 'test'.
-	self assert: event asString = 'test'.
+	self assert: event asString equals: 'test'
 ]
 
 { #category : #tests }
@@ -28,7 +31,7 @@ StAXStringEventTest >> testIsEmpty [
 	self assert: event isEmpty.
 
 	event string: 'test'.
-	self deny: event isEmpty.
+	self deny: event isEmpty
 ]
 
 { #category : #tests }
@@ -49,7 +52,7 @@ StAXStringEventTest >> testIsStringEvent [
 	event string: 'two'.
 	self
 		deny: (event isStringEvent: 'one');
-		assert: (event isStringEvent: 'two').
+		assert: (event isStringEvent: 'two')
 ]
 
 { #category : #testing }
@@ -63,7 +66,7 @@ StAXStringEventTest >> testIsWhitespace [
 	self assert: event isWhitespace.
 
 	event string: event string, 'non-space'.
-	self deny: event isWhitespace.
+	self deny: event isWhitespace
 ]
 
 { #category : #tests }
@@ -74,7 +77,7 @@ StAXStringEventTest >> testNotEmpty [
 	self deny: event notEmpty.
 
 	event string: 'test'.
-	self assert: event notEmpty.
+	self assert: event notEmpty
 ]
 
 { #category : #tests }
@@ -83,12 +86,12 @@ StAXStringEventTest >> testString [
 
 	event := self newEvent.
 	self
-		assert: event string = '';
+		assert: event string equals: '';
 		assert: (event string: 'test') == event;
-		assert: event string = 'test'.
+		assert: event string equals: 'test'.
 
 	event := self eventClass string: 'test'.
 	self
 		assert: event class == self eventClass;
-		assert: event string = 'test'.
+		assert: event string equals: 'test'
 ]

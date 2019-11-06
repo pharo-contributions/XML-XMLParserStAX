@@ -1,7 +1,10 @@
+"
+Unit tests for StAXPIEvent
+"
 Class {
 	#name : #StAXPIEventTest,
 	#superclass : #StAXEventTest,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Events'
 }
 
 { #category : #accessing }
@@ -15,9 +18,9 @@ StAXPIEventTest >> testData [
 
 	pi := self newEvent.
 	self
-		assert: pi data = '';
+		assert: pi data equals: '';
 		assert: (pi data: 'test') == pi;
-		assert: pi data = 'test'.
+		assert: pi data equals: 'test'
 ]
 
 { #category : #tests }
@@ -31,9 +34,9 @@ StAXPIEventTest >> testTarget [
 
 	pi := self newEvent.
 	self
-		assert: pi target = '';
+		assert: pi target equals: '';
 		assert: (pi target: 'test') == pi;
-		assert: pi target = 'test'.
+		assert: pi target equals: 'test'
 ]
 
 { #category : #tests }
@@ -46,6 +49,6 @@ StAXPIEventTest >> testTargetData [
 			data: 'data'.
 	self
 		assert: pi class == self eventClass;
-		assert: pi target = 'target';
-		assert: pi data = 'data'.
+		assert: pi target equals: 'target';
+		assert: pi data equals: 'data'
 ]

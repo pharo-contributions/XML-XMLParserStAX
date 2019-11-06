@@ -1,7 +1,10 @@
+"
+Unit tests for StAXHTMLParser
+"
 Class {
 	#name : #StAXHTMLParserTest,
 	#superclass : #TestCase,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Parser'
 }
 
 { #category : #asserting }

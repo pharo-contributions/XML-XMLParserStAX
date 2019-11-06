@@ -1,7 +1,10 @@
+"
+Unit tests for StAXStartDocumentEvent
+"
 Class {
 	#name : #StAXStartDocumentEventTest,
 	#superclass : #StAXEventTest,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Events'
 }
 
 { #category : #accessing }

@@ -1,7 +1,10 @@
+"
+Unit tests for StAXStartTagEvent
+"
 Class {
 	#name : #StAXStartTagEventTest,
 	#superclass : #StAXTagEventTest,
-	#category : #'XML-ParserStAX-Tests'
+	#category : #'XML-ParserStAX-Tests-Events'
 }
 
 { #category : #accessing }
@@ -32,7 +35,7 @@ StAXStartTagEventTest >> testIsStartTagNamed [
 	self
 		assert: (tag isStartTagNamed: 'two');
 		assert: (tag isStartTagNamed: 'one:two');
-		deny: (tag isStartTagNamed: 'one').
+		deny: (tag isStartTagNamed: 'one')
 ]
 
 { #category : #tests }
@@ -53,5 +56,5 @@ StAXStartTagEventTest >> testIsStartTagNamedAny [
 	self
 		assert: (tag isStartTagNamedAny: #('two' 'one'));
 		assert: (tag isStartTagNamedAny: #('two' 'one:two'));
-		deny: (tag isStartTagNamedAny: #('one' 'two:one')).
+		deny: (tag isStartTagNamedAny: #('one' 'two:one'))
 ]
