@@ -22,7 +22,7 @@ BaselineOfXMLParserStAX >> baselineOf: spec [
 			"Packages"
 			spec 
 				package: 'XML-ParserStAX-Core' with: [ spec requires: #('XMLParser') ];
-				package: 'XML-ParserStAX-Tests' with: [ spec requires: #('XMLParser Tests' ) ].
+				package: 'XML-ParserStAX-Tests' with: [ spec requires: #('XMLParser Tests' 'XML-ParserStAX-Core') ].
 			
 			"Groups"
 			spec
