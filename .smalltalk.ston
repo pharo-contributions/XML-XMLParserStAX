@@ -1,0 +1,10 @@
+SmalltalkCISpec {
+	#loading : [
+		SCIMetacelloLoadSpec {
+			#baseline : 'XMLParserStAX',
+			#directory : 'src',
+			#load : [ 'Tests' ],
+			#platforms : [ #pharo ]
+		}
+	]
+}
