@@ -412,8 +412,8 @@ ConfigurationOfXMLParserStAX >> customProjectAttributes [
 ]
 
 { #category : #'symbolic versions' }
-ConfigurationOfXMLParserStAX >> development: spec [
-	<symbolicVersion: #'development'>
+ConfigurationOfXMLParserStAX >> dev: spec [
+	<version: #'dev'>
 
 	spec for: #'common' do: [ 
 		spec
@@ -421,6 +421,13 @@ ConfigurationOfXMLParserStAX >> development: spec [
 				spec 
 					className: 'BaselineOfXMLParserStAX';
 					repository: 'github://pharo-contributions/XML-XMLParserStAX:master/src' ]]
+]
+
+{ #category : #'symbolic versions' }
+ConfigurationOfXMLParserStAX >> development: spec [
+	<symbolicVersion: #'development'>
+
+	spec for: #'common' version: 'dev'.
 ]
 
 { #category : #doits }
